@@ -1,0 +1,3 @@
+# Exclude server-side worker code from public assets
+# This prevents the _worker.js directory from being exposed publicly
+_worker.js
