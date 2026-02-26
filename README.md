@@ -236,6 +236,29 @@ Don't forget to add these environment variables to your Cloudflare Pages deploym
 
 > **Note:** This site is deployed using **Cloudflare Pages** (not Cloudflare Workers). Cloudflare Pages is optimized for static sites and provides automatic builds from Git. No `wrangler.toml` or `wrangler deploy` commands are needed for static Astro sites.
 
+### ⚠️ First-Time Deployment (Without Sanity Configuration)
+
+**Good news!** The site is designed to build and deploy successfully even without Sanity CMS configured. This allows you to:
+
+1. **Deploy first, configure later** - Get your site live immediately
+2. **See the site structure** - All pages render with placeholder content
+3. **Add Sanity later** - Simply add environment variables and redeploy
+
+During the build, you'll see a warning if Sanity isn't configured:
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        SANITY CMS NOT CONFIGURED                          ║
+║ The site will build successfully, but blog content will not be available. ║
+╚════════════════════════════════════════════════════════════════════════════╝
+```
+
+**This is expected for first-time deployments!** The site will work, but:
+- Blog pages will show "No posts found" messages
+- Author sections will use default placeholder data
+- Comments won't work until Giscus is configured
+
+After deployment, add the environment variables in Cloudflare Pages dashboard and trigger a new build.
+
 ### Step 1: Push to GitHub
 
 ```bash

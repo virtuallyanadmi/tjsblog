@@ -6,8 +6,8 @@ import RecentPosts from '../components/RecentPosts.astro';
 import { getRecentPosts, getFeaturedPosts } from '../lib/sanity';
 
 // Fetch data from Sanity (will fall back to empty arrays if Sanity is not configured)
-let recentPosts = [];
-let featuredPosts = [];
+let recentPosts: any[] = [];
+let featuredPosts: any[] = [];
 
 try {
   recentPosts = await getRecentPosts();
