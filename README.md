@@ -38,7 +38,7 @@ Before you begin, ensure you have:
 
 ```bash
 git clone https://github.com/virtuallyanadmi/tjsblog.git
-cd thejonathanstewart-blog
+cd tjsblog
 ```
 
 ### 2. Install Dependencies
