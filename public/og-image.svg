@@ -1,0 +1,13 @@
+<svg width="1200" height="630" xmlns="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Blue_gradient.svg/1920px-Blue_gradient.svg.png">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0c4a6e"/>
+      <stop offset="50%" style="stop-color:#0369a1"/>
+      <stop offset="100%" style="stop-color:#0c4a6e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grad)"/>
+  <text x="600" y="280" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">Jonathan Stewart</text>
+  <text x="600" y="360" font-family="Arial, sans-serif" font-size="32" fill="#bae6fd" text-anchor="middle">Cloud • AI • Leadership</text>
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="24" fill="#7dd3fc" text-anchor="middle">thejonathanstewart.com</text>
+</svg>

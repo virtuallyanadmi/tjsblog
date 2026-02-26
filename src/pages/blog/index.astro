@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import CategoryFilter from '../../components/CategoryFilter.astro';
+import { getAllPosts, getAllCategories, getPostsByCategory } from '../../lib/sanity';
+
+// Get category from URL params
+const categorySlug = Astro.url.searchParams.get('category');
+
+// Fetch data
+let posts = [];
+let categories = [];
+
+try {
+  categories = await getAllCategories();
+  
+  if (categorySlug) {
+    posts = await getPostsByCategory(categorySlug);
+  } else {
+    posts = await getAllPosts();
+  }
+} catch (error) {
+  console.log('Sanity not configured or data not available');
+}
+
+// Find active category name for title
+const activeCategory = categories.find((c: any) => c.slug.current === categorySlug);
+const pageTitle = activeCategory 
+  ? `${activeCategory.title} - Blog` 
+  : 'Blog - Jonathan Stewart';
+---
+
+<BaseLayout title={pageTitle}>
+  <!-- Page Header -->
+  <section class="bg-gray-50 py-12 md:py-20">
+    <div class="container-custom text-center">
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
+        {activeCategory ? activeCategory.title : 'Blog'}
+      </h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        {activeCategory 
+          ? activeCategory.description || `Insights and thoughts on ${activeCategory.title.toLowerCase()}`
+          : 'Insights on cloud efficiencies, AI enablement, and leadership development'
+        }
+      </p>
+    </div>
+  </section>
+
+  <!-- Category Filter -->
+  <section class="py-8 border-b border-gray-100">
+    <div class="container-custom">
+      <CategoryFilter 
+        categories={categories} 
+        activeCategory={categorySlug || undefined}
+      />
+    </div>
+  </section>
+
+  <!-- Posts Grid -->
+  <section class="py-12 md:py-16">
+    <div class="container-custom">
+      {posts && posts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post: any) => (
+            <BlogCard {...post} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <div class="text-6xl mb-4">📝</div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            {categorySlug ? `No posts in ${activeCategory?.title || 'this category'} yet` : 'No posts yet'}
+          </h3>
+          <p class="text-gray-600 mb-6">
+            Check back soon for new content!
+          </p>
+          {categorySlug && (
+            <a href="/blog" class="btn-primary">
+              View all posts
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

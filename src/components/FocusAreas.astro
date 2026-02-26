@@ -1,0 +1,62 @@
+---
+const focusAreas = [
+  {
+    icon: '☁️',
+    title: 'Cloud Efficiencies',
+    description: 'Optimizing cloud infrastructure for cost savings, performance, and scalability. From migration strategies to FinOps practices.',
+    color: 'blue',
+    link: '/blog?category=cloud'
+  },
+  {
+    icon: '🤖',
+    title: 'AI Enablement',
+    description: 'Helping organizations adopt and integrate AI technologies effectively. Strategy, implementation, and ethical considerations.',
+    color: 'purple',
+    link: '/blog?category=ai'
+  },
+  {
+    icon: '🎯',
+    title: 'Leadership Development',
+    description: 'Building high-performing teams through servant leadership, mentorship, and creating cultures of continuous improvement.',
+    color: 'green',
+    link: '/blog?category=leadership'
+  }
+];
+---
+
+<section class="py-16 md:py-24 bg-gray-50">
+  <div class="container-custom">
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <h2 class="section-heading">Focus Areas</h2>
+      <p class="section-subheading mx-auto">
+        Explore the key areas where I help businesses transform and grow
+      </p>
+    </div>
+
+    <!-- Focus Area Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {focusAreas.map((area) => (
+        <a 
+          href={area.link}
+          class="card p-8 text-center card-hover group"
+        >
+          <div class:list={[
+            'w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center text-3xl',
+            area.color === 'blue' && 'bg-blue-100',
+            area.color === 'purple' && 'bg-purple-100',
+            area.color === 'green' && 'bg-green-100'
+          ]}>
+            {area.icon}
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+            {area.title}
+          </h3>
+          <p class="text-gray-600">
+            {area.description}
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

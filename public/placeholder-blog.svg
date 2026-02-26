@@ -1,0 +1,11 @@
+<svg width="800" height="450" xmlns="https://www.visualcinnamon.com/img/blog/2016/gradient-legend/intro_gradients.png">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f3f4f6"/>
+      <stop offset="100%" style="stop-color:#e5e7eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <text x="400" y="200" font-family="Arial, sans-serif" font-size="48" fill="#9ca3af" text-anchor="middle">Blog Post</text>
+  <text x="400" y="260" font-family="Arial, sans-serif" font-size="24" fill="#d1d5db" text-anchor="middle">Image Coming Soon</text>
+</svg>

@@ -1,0 +1,161 @@
+---
+// Contact form component using Web3Forms or Formspree
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY;
+const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
+
+// Determine which form service to use
+const formAction = web3formsKey 
+  ? 'https://api.web3forms.com/submit' 
+  : formspreeId 
+    ? `https://formspree.io/f/${formspreeId}` 
+    : '#';
+---
+
+<form 
+  id="contact-form"
+  action={formAction} 
+  method="POST" 
+  class="space-y-6"
+>
+  {/* Web3Forms access key (hidden) */}
+  {web3formsKey && (
+    <input type="hidden" name="access_key" value={web3formsKey} />
+  )}
+  
+  {/* Honeypot for spam protection */}
+  <input type="checkbox" name="botcheck" class="hidden" style="display: none;" />
+  
+  {/* Redirect URL (optional) */}
+  <input type="hidden" name="redirect" value="https://thejonathanstewart.com/contact?success=true" />
+  
+  {/* Subject line */}
+  <input type="hidden" name="subject" value="New Contact Form Submission - thejonathanstewart.com" />
+
+  <!-- Name Field -->
+  <div>
+    <label for="name" class="form-label">Name *</label>
+    <input 
+      type="text" 
+      id="name" 
+      name="name" 
+      required 
+      class="form-input"
+      placeholder="Your name"
+    />
+    <p class="form-error hidden" id="name-error">Please enter your name</p>
+  </div>
+
+  <!-- Email Field -->
+  <div>
+    <label for="email" class="form-label">Email *</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email" 
+      required 
+      class="form-input"
+      placeholder="your@email.com"
+    />
+    <p class="form-error hidden" id="email-error">Please enter a valid email address</p>
+  </div>
+
+  <!-- Company Field (optional) -->
+  <div>
+    <label for="company" class="form-label">Company <span class="text-gray-400">(optional)</span></label>
+    <input 
+      type="text" 
+      id="company" 
+      name="company" 
+      class="form-input"
+      placeholder="Your company"
+    />
+  </div>
+
+  <!-- Message Field -->
+  <div>
+    <label for="message" class="form-label">Message *</label>
+    <textarea 
+      id="message" 
+      name="message" 
+      rows="5" 
+      required 
+      class="form-input resize-none"
+      placeholder="How can I help you?"
+    ></textarea>
+    <p class="form-error hidden" id="message-error">Please enter your message</p>
+  </div>
+
+  <!-- Submit Button -->
+  <div>
+    <button 
+      type="submit" 
+      id="submit-btn"
+      class="btn-primary w-full"
+    >
+      <span id="btn-text">Send Message</span>
+      <svg id="btn-loading" class="hidden w-5 h-5 ml-2 animate-spin" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </button>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('btn-text');
+  const btnLoading = document.getElementById('btn-loading');
+  
+  // Client-side validation
+  function validateForm(): boolean {
+    let isValid = true;
+    const fields = ['name', 'email', 'message'];
+    
+    fields.forEach(field => {
+      const input = document.getElementById(field) as HTMLInputElement | HTMLTextAreaElement;
+      const error = document.getElementById(`${field}-error`);
+      
+      if (input && error) {
+        if (!input.value.trim()) {
+          error.classList.remove('hidden');
+          input.classList.add('border-red-500');
+          isValid = false;
+        } else {
+          error.classList.add('hidden');
+          input.classList.remove('border-red-500');
+        }
+        
+        // Email validation
+        if (field === 'email' && input.value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(input.value)) {
+            error.classList.remove('hidden');
+            error.textContent = 'Please enter a valid email address';
+            input.classList.add('border-red-500');
+            isValid = false;
+          }
+        }
+      }
+    });
+    
+    return isValid;
+  }
+  
+  // Handle form submission
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      if (!validateForm()) {
+        e.preventDefault();
+        return;
+      }
+      
+      // Show loading state
+      if (submitBtn && btnText && btnLoading) {
+        submitBtn.disabled = true;
+        btnText.textContent = 'Sending...';
+        btnLoading.classList.remove('hidden');
+      }
+    });
+  }
+</script>

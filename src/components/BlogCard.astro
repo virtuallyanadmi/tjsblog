@@ -1,0 +1,107 @@
+---
+import { urlFor } from '../lib/sanity';
+import { formatDate, getCategoryColor, getCategoryIcon } from '../lib/utils';
+
+interface Category {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  color?: string;
+  icon?: string;
+}
+
+interface Author {
+  name: string;
+  image?: any;
+}
+
+interface Props {
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+  publishedAt?: string;
+  mainImage?: any;
+  categories?: Category[];
+  author?: Author;
+  featured?: boolean;
+}
+
+const { title, slug, excerpt, publishedAt, mainImage, categories, author, featured } = Astro.props;
+
+const imageUrl = mainImage ? urlFor(mainImage).width(800).height(450).url() : '/placeholder-blog.svg';
+---
+
+<article class:list={['card card-hover group', featured && 'ring-2 ring-primary-500']}>
+  <a href={`/blog/${slug.current}`} class="block">
+    <!-- Image -->
+    <div class="relative aspect-video overflow-hidden">
+      <img 
+        src={imageUrl} 
+        alt={mainImage?.alt || title}
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+      />
+      {featured && (
+        <div class="absolute top-4 left-4">
+          <span class="badge bg-primary-600 text-white">
+            ⭐ Featured
+          </span>
+        </div>
+      )}
+    </div>
+
+    <!-- Content -->
+    <div class="p-6">
+      <!-- Categories -->
+      {categories && categories.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-3">
+          {categories.map((category) => (
+            <span class:list={['badge', `badge-${category.color || 'blue'}`]}>
+              {getCategoryIcon(category.icon)} {category.title}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <!-- Title -->
+      <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
+        {title}
+      </h3>
+
+      <!-- Excerpt -->
+      {excerpt && (
+        <p class="text-gray-600 mb-4 line-clamp-2">
+          {excerpt}
+        </p>
+      )}
+
+      <!-- Meta -->
+      <div class="flex items-center justify-between text-sm text-gray-500">
+        <div class="flex items-center space-x-2">
+          {author?.image && (
+            <img 
+              src={urlFor(author.image).width(32).height(32).url()} 
+              alt={author.name}
+              class="w-6 h-6 rounded-full"
+            />
+          )}
+          <span>{author?.name || 'Jonathan Stewart'}</span>
+        </div>
+        {publishedAt && (
+          <time datetime={publishedAt}>
+            {formatDate(publishedAt)}
+          </time>
+        )}
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

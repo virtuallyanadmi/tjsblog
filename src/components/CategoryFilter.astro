@@ -1,0 +1,47 @@
+---
+import { getCategoryIcon, getCategoryColor } from '../lib/utils';
+
+interface Category {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  color?: string;
+  icon?: string;
+}
+
+interface Props {
+  categories: Category[];
+  activeCategory?: string;
+}
+
+const { categories, activeCategory } = Astro.props;
+---
+
+<div class="flex flex-wrap gap-3 justify-center mb-8">
+  <a 
+    href="/blog"
+    class:list={[
+      'px-4 py-2 rounded-full font-medium transition-all duration-200',
+      !activeCategory 
+        ? 'bg-primary-600 text-white shadow-md' 
+        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+    ]}
+  >
+    All Posts
+  </a>
+  
+  {categories.map((category) => (
+    <a 
+      href={`/blog?category=${category.slug.current}`}
+      class:list={[
+        'px-4 py-2 rounded-full font-medium transition-all duration-200 inline-flex items-center gap-2',
+        activeCategory === category.slug.current
+          ? 'bg-primary-600 text-white shadow-md'
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+      ]}
+    >
+      <span>{getCategoryIcon(category.icon)}</span>
+      <span>{category.title}</span>
+    </a>
+  ))}
+</div>
