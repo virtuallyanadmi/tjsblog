@@ -46,7 +46,7 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
 >
   <article>
     <!-- Hero -->
-    <header class="bg-gray-50 py-12 md:py-20">
+    <header class="bg-gray-50 dark:bg-gray-800/50 py-12 md:py-20 transition-colors duration-200">
       <div class="container-custom max-w-4xl">
         <!-- Categories -->
         {post.categories && post.categories.length > 0 && (
@@ -63,19 +63,19 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
         )}
 
         <!-- Title -->
-        <h1 class="text-3xl md:text-5xl font-display font-bold text-gray-900 mb-6 text-center text-balance">
+        <h1 class="text-3xl md:text-5xl font-display font-bold text-gray-900 dark:text-white mb-6 text-center text-balance transition-colors duration-200">
           {post.title}
         </h1>
 
         <!-- Excerpt -->
         {post.excerpt && (
-          <p class="text-xl text-gray-600 text-center max-w-3xl mx-auto mb-8">
+          <p class="text-xl text-gray-600 dark:text-gray-400 text-center max-w-3xl mx-auto mb-8 transition-colors duration-200">
             {post.excerpt}
           </p>
         )}
 
         <!-- Meta -->
-        <div class="flex items-center justify-center space-x-4 text-gray-600">
+        <div class="flex items-center justify-center space-x-4 text-gray-600 dark:text-gray-400 transition-colors duration-200">
           {post.author && (
             <div class="flex items-center space-x-2">
               {post.author.image && (
@@ -116,9 +116,9 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
 
     <!-- Author Bio -->
     {post.author && (
-      <section class="bg-gray-50 py-12">
+      <section class="bg-gray-50 dark:bg-gray-800/50 py-12 transition-colors duration-200">
         <div class="container-custom max-w-3xl">
-          <div class="flex flex-col md:flex-row items-center md:items-start gap-6 p-6 bg-white rounded-xl">
+          <div class="flex flex-col md:flex-row items-center md:items-start gap-6 p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors duration-200">
             {post.author.image && (
               <img 
                 src={urlFor(post.author.image).width(120).height(120).url()} 
@@ -127,25 +127,25 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
               />
             )}
             <div class="text-center md:text-left">
-              <h3 class="text-lg font-bold text-gray-900">About {post.author.name}</h3>
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white transition-colors duration-200">About {post.author.name}</h3>
               {post.author.title && (
-                <p class="text-primary-600 mb-2">{post.author.title}</p>
+                <p class="text-primary-600 dark:text-primary-400 mb-2 transition-colors duration-200">{post.author.title}</p>
               )}
               {post.author.bio && (
-                <p class="text-gray-600">
+                <p class="text-gray-600 dark:text-gray-400 transition-colors duration-200">
                   {post.author.bio[0]?.children?.[0]?.text || ''}
                 </p>
               )}
               <div class="flex gap-3 mt-4 justify-center md:justify-start">
                 {post.author.linkedin && (
-                  <a href={post.author.linkedin} target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary-600">
+                  <a href={post.author.linkedin} target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
                   </a>
                 )}
                 {post.author.twitter && (
-                  <a href={post.author.twitter} target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary-600">
+                  <a href={post.author.twitter} target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                     </svg>
@@ -167,7 +167,7 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
     <div class="container-custom max-w-3xl py-8">
       <a 
         href="/blog" 
-        class="inline-flex items-center text-primary-600 font-medium hover:text-primary-700"
+        class="inline-flex items-center text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />

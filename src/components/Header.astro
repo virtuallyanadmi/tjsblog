@@ -1,4 +1,6 @@
 ---
+import ThemeToggle from './ThemeToggle.astro';
+
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Blog' },
@@ -9,7 +11,7 @@ const navLinks = [
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+<header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800 transition-colors duration-200">
   <nav class="container-custom">
     <div class="flex items-center justify-between h-16 md:h-20">
       <!-- Logo -->
@@ -27,31 +29,37 @@ const currentPath = Astro.url.pathname;
             class:list={[
               'text-sm font-medium transition-colors duration-200',
               currentPath === href || (href !== '/' && currentPath.startsWith(href))
-                ? 'text-primary-600'
-                : 'text-gray-600 hover:text-primary-600'
+                ? 'text-primary-600 dark:text-primary-400'
+                : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
             ]}
           >
             {label}
           </a>
         ))}
+        
+        <!-- Theme Toggle (Desktop) -->
+        <ThemeToggle />
       </div>
 
-      <!-- Mobile Menu Button -->
-      <button 
-        id="mobile-menu-btn" 
-        class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-        aria-label="Toggle menu"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path 
-            id="menu-icon" 
-            stroke-linecap="round" 
-            stroke-linejoin="round" 
-            stroke-width="2" 
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
+      <!-- Mobile: Theme Toggle + Menu Button -->
+      <div class="flex items-center space-x-2 md:hidden">
+        <ThemeToggle />
+        <button 
+          id="mobile-menu-btn" 
+          class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          aria-label="Toggle menu"
+        >
+          <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path 
+              id="menu-icon" 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              stroke-width="2" 
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Mobile Navigation -->
@@ -63,8 +71,8 @@ const currentPath = Astro.url.pathname;
             class:list={[
               'text-base font-medium py-2 px-4 rounded-lg transition-colors duration-200',
               currentPath === href || (href !== '/' && currentPath.startsWith(href))
-                ? 'text-primary-600 bg-primary-50'
-                : 'text-gray-600 hover:text-primary-600 hover:bg-gray-50'
+                ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30'
+                : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
             ]}
           >
             {label}

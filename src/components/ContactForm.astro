@@ -61,7 +61,7 @@ const formAction = web3formsKey
 
   <!-- Company Field (optional) -->
   <div>
-    <label for="company" class="form-label">Company <span class="text-gray-400">(optional)</span></label>
+    <label for="company" class="form-label">Company <span class="text-gray-400 dark:text-gray-500">(optional)</span></label>
     <input 
       type="text" 
       id="company" 
@@ -119,11 +119,11 @@ const formAction = web3formsKey
       if (input && error) {
         if (!input.value.trim()) {
           error.classList.remove('hidden');
-          input.classList.add('border-red-500');
+          input.classList.add('border-red-500', 'dark:border-red-500');
           isValid = false;
         } else {
           error.classList.add('hidden');
-          input.classList.remove('border-red-500');
+          input.classList.remove('border-red-500', 'dark:border-red-500');
         }
         
         // Email validation
@@ -132,7 +132,7 @@ const formAction = web3formsKey
           if (!emailRegex.test(input.value)) {
             error.classList.remove('hidden');
             error.textContent = 'Please enter a valid email address';
-            input.classList.add('border-red-500');
+            input.classList.add('border-red-500', 'dark:border-red-500');
             isValid = false;
           }
         }

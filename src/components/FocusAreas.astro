@@ -24,7 +24,7 @@ const focusAreas = [
 ];
 ---
 
-<section class="py-16 md:py-24 bg-gray-50">
+<section class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800/50 transition-colors duration-200">
   <div class="container-custom">
     <!-- Section Header -->
     <div class="text-center mb-12">
@@ -43,16 +43,16 @@ const focusAreas = [
         >
           <div class:list={[
             'w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center text-3xl',
-            area.color === 'blue' && 'bg-blue-100',
-            area.color === 'purple' && 'bg-purple-100',
-            area.color === 'green' && 'bg-green-100'
+            area.color === 'blue' && 'bg-blue-100 dark:bg-blue-900/30',
+            area.color === 'purple' && 'bg-purple-100 dark:bg-purple-900/30',
+            area.color === 'green' && 'bg-green-100 dark:bg-green-900/30'
           ]}>
             {area.icon}
           </div>
-          <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
             {area.title}
           </h3>
-          <p class="text-gray-600">
+          <p class="text-gray-600 dark:text-gray-400">
             {area.description}
           </p>
         </a>

@@ -23,18 +23,22 @@
 
   .btn-primary {
     @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
+    @apply dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-offset-gray-900;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
+    @apply dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-900;
   }
 
   .btn-outline {
     @apply inline-flex items-center justify-center px-6 py-3 border-2 border-primary-600 text-base font-medium rounded-lg text-primary-600 bg-transparent hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
+    @apply dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-900/30 dark:focus:ring-offset-gray-900;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300;
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300;
+    @apply dark:bg-gray-800 dark:border-gray-700 dark:hover:shadow-lg dark:hover:shadow-gray-900/20;
   }
 
   .card-hover {
@@ -43,14 +47,15 @@
 
   .gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-600;
+    @apply dark:from-primary-400 dark:to-accent-400;
   }
 
   .section-heading {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 mb-4;
+    @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-200;
   }
 
   .section-subheading {
-    @apply text-lg text-gray-600 max-w-2xl;
+    @apply text-lg text-gray-600 dark:text-gray-400 max-w-2xl transition-colors duration-200;
   }
 
   /* Category badges */
@@ -59,32 +64,33 @@
   }
 
   .badge-blue {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300;
   }
 
   .badge-purple {
-    @apply bg-purple-100 text-purple-800;
+    @apply bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300;
   }
 
   .badge-green {
-    @apply bg-green-100 text-green-800;
+    @apply bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300;
   }
 
   .badge-orange {
-    @apply bg-orange-100 text-orange-800;
+    @apply bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300;
   }
 
   /* Form styles */
   .form-input {
     @apply block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 px-4 py-3 border transition-colors duration-200;
+    @apply dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400;
   }
 
   .form-label {
-    @apply block text-sm font-medium text-gray-700 mb-2;
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200;
   }
 
   .form-error {
-    @apply text-red-600 text-sm mt-1;
+    @apply text-red-600 dark:text-red-400 text-sm mt-1;
   }
 }
 
@@ -96,19 +102,19 @@
 
 /* Prose styles for blog content */
 .prose {
-  @apply text-gray-700 leading-relaxed;
+  @apply text-gray-700 dark:text-gray-300 leading-relaxed transition-colors duration-200;
 }
 
 .prose h2 {
-  @apply text-3xl font-bold mt-10 mb-4 text-gray-900;
+  @apply text-3xl font-bold mt-10 mb-4 text-gray-900 dark:text-white;
 }
 
 .prose h3 {
-  @apply text-2xl font-bold mt-8 mb-3 text-gray-900;
+  @apply text-2xl font-bold mt-8 mb-3 text-gray-900 dark:text-white;
 }
 
 .prose h4 {
-  @apply text-xl font-semibold mt-6 mb-2 text-gray-900;
+  @apply text-xl font-semibold mt-6 mb-2 text-gray-900 dark:text-white;
 }
 
 .prose p {
@@ -116,11 +122,11 @@
 }
 
 .prose a {
-  @apply text-primary-600 hover:text-primary-800 underline;
+  @apply text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 underline;
 }
 
 .prose blockquote {
-  @apply border-l-4 border-primary-500 pl-4 my-6 italic text-gray-600;
+  @apply border-l-4 border-primary-500 dark:border-primary-400 pl-4 my-6 italic text-gray-600 dark:text-gray-400;
 }
 
 .prose ul {
@@ -136,13 +142,13 @@
 }
 
 .prose pre {
-  @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-6;
+  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-lg overflow-x-auto my-6;
 }
 
 .prose code {
-  @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+  @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono text-gray-800 dark:text-gray-200;
 }
 
 .prose pre code {
-  @apply bg-transparent p-0;
+  @apply bg-transparent p-0 text-gray-100;
 }

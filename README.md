@@ -12,6 +12,7 @@ A professional blog built with **Astro** and **Sanity CMS**, focused on cloud ef
 - **Headless CMS** powered by Sanity for easy content management
 - **Blog** with category filtering (Cloud, AI, Leadership)
 - **Professional Design** with Tailwind CSS
+- **Dark Mode** with system preference detection and manual toggle
 - **Fully Responsive** mobile-first design
 - **SEO Optimized** with meta tags, Open Graph, and sitemap
 - **Contact Form** with email notifications
@@ -330,7 +331,8 @@ thejonathanstewart-blog/
 │   │   ├── CategoryFilter.astro
 │   │   ├── ContactForm.astro
 │   │   ├── FocusAreas.astro
-│   │   └── Giscus.astro    # Comments component
+│   │   ├── Giscus.astro    # Comments component
+│   │   └── ThemeToggle.astro # Dark mode toggle
 │   ├── layouts/            # Page layouts
 │   │   └── BaseLayout.astro
 │   ├── lib/                # Utilities & Sanity client
@@ -401,7 +403,7 @@ This codebase is designed to be easily extended. Here are some planned features:
 - [ ] **Newsletter Subscription** - Integration with ConvertKit/Mailchimp
 - [ ] **Services Page** - Showcase consulting services
 - [ ] **Testimonials** - Client testimonials section
-- [ ] **Dark Mode** - Toggle between light/dark themes
+- [x] **Dark Mode** - Toggle between light/dark themes with system preference support
 - [ ] **Search** - Full-text search across posts
 - [ ] **RSS Feed** - For blog syndication
 - [x] **Comments** - Blog post comments via Giscus (GitHub Discussions)

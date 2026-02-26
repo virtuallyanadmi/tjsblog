@@ -4,6 +4,7 @@
  * 
  * A comments widget powered by GitHub Discussions.
  * Configure via environment variables or props.
+ * Theme-aware: automatically switches between light/dark based on site theme.
  * 
  * @see https://giscus.app for configuration options
  */
@@ -25,8 +26,6 @@ interface Props {
   emitMetadata?: boolean;
   /** Input position: 'top' | 'bottom' */
   inputPosition?: 'top' | 'bottom';
-  /** Giscus theme: 'light' | 'dark' | 'preferred_color_scheme' | custom URL */
-  theme?: string;
   /** Language code */
   lang?: string;
   /** Load comments lazily */
@@ -42,7 +41,6 @@ const {
   reactionsEnabled = true,
   emitMetadata = false,
   inputPosition = 'bottom',
-  theme = 'light',
   lang = 'en',
   lazyLoad = true,
 } = Astro.props;
@@ -52,11 +50,10 @@ const isConfigured = repo && repoId && categoryId;
 ---
 
 {isConfigured ? (
-  <section class="giscus-comments mt-12 pt-8 border-t border-gray-200">
-    <h2 class="text-2xl font-display font-bold text-gray-900 mb-6">Comments</h2>
-    <div class="giscus-wrapper bg-white rounded-lg">
-      <script
-        src="https://giscus.app/client.js"
+  <section class="giscus-comments mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 transition-colors duration-200">
+    <h2 class="text-2xl font-display font-bold text-gray-900 dark:text-white mb-6">Comments</h2>
+    <div class="giscus-wrapper bg-white dark:bg-gray-800 rounded-lg transition-colors duration-200">
+      <div id="giscus-container"
         data-repo={repo}
         data-repo-id={repoId}
         data-category={category}
@@ -66,37 +63,96 @@ const isConfigured = repo && repoId && categoryId;
         data-reactions-enabled={reactionsEnabled ? '1' : '0'}
         data-emit-metadata={emitMetadata ? '1' : '0'}
         data-input-position={inputPosition}
-        data-theme={theme}
         data-lang={lang}
         data-loading={lazyLoad ? 'lazy' : 'eager'}
-        crossorigin="anonymous"
-        async
       />
     </div>
   </section>
 ) : (
   <!-- Giscus not configured - show nothing in production, helpful message in dev -->
   import.meta.env.DEV && (
-    <section class="giscus-comments mt-12 pt-8 border-t border-gray-200">
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-        <h3 class="text-lg font-semibold text-yellow-800 mb-2">
+    <section class="giscus-comments mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
           📝 Giscus Comments Not Configured
         </h3>
-        <p class="text-yellow-700 text-sm">
+        <p class="text-yellow-700 dark:text-yellow-300 text-sm">
           To enable comments, configure the following environment variables:
         </p>
-        <ul class="list-disc list-inside text-yellow-700 text-sm mt-2 space-y-1">
-          <li><code class="bg-yellow-100 px-1 rounded">PUBLIC_GISCUS_REPO</code> - Your GitHub repo (owner/repo)</li>
-          <li><code class="bg-yellow-100 px-1 rounded">PUBLIC_GISCUS_REPO_ID</code> - Repository ID</li>
-          <li><code class="bg-yellow-100 px-1 rounded">PUBLIC_GISCUS_CATEGORY_ID</code> - Category ID</li>
+        <ul class="list-disc list-inside text-yellow-700 dark:text-yellow-300 text-sm mt-2 space-y-1">
+          <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_REPO</code> - Your GitHub repo (owner/repo)</li>
+          <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_REPO_ID</code> - Repository ID</li>
+          <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_CATEGORY_ID</code> - Category ID</li>
         </ul>
-        <p class="text-yellow-700 text-sm mt-2">
-          Visit <a href="https://giscus.app" class="underline hover:text-yellow-900" target="_blank" rel="noopener">giscus.app</a> to get these values.
+        <p class="text-yellow-700 dark:text-yellow-300 text-sm mt-2">
+          Visit <a href="https://giscus.app" class="underline hover:text-yellow-900 dark:hover:text-yellow-100" target="_blank" rel="noopener">giscus.app</a> to get these values.
         </p>
       </div>
     </section>
   )
 )}
+
+<script>
+  // Get current theme
+  function getCurrentTheme() {
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  }
+
+  // Load or reload Giscus with the correct theme
+  function loadGiscus() {
+    const container = document.getElementById('giscus-container');
+    if (!container) return;
+
+    // Remove existing Giscus iframe if present
+    const existingGiscus = container.querySelector('.giscus');
+    if (existingGiscus) {
+      existingGiscus.remove();
+    }
+
+    // Get theme
+    const theme = getCurrentTheme();
+
+    // Create and inject the Giscus script
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', container.dataset.repo || '');
+    script.setAttribute('data-repo-id', container.dataset.repoId || '');
+    script.setAttribute('data-category', container.dataset.category || '');
+    script.setAttribute('data-category-id', container.dataset.categoryId || '');
+    script.setAttribute('data-mapping', container.dataset.mapping || 'pathname');
+    script.setAttribute('data-strict', container.dataset.strict || '0');
+    script.setAttribute('data-reactions-enabled', container.dataset.reactionsEnabled || '1');
+    script.setAttribute('data-emit-metadata', container.dataset.emitMetadata || '0');
+    script.setAttribute('data-input-position', container.dataset.inputPosition || 'bottom');
+    script.setAttribute('data-theme', theme);
+    script.setAttribute('data-lang', container.dataset.lang || 'en');
+    script.setAttribute('data-loading', container.dataset.loading || 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+
+    container.appendChild(script);
+  }
+
+  // Update Giscus theme via postMessage
+  function updateGiscusTheme(theme: string) {
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme } } },
+        'https://giscus.app'
+      );
+    }
+  }
+
+  // Initialize Giscus on page load
+  loadGiscus();
+
+  // Listen for theme changes
+  window.addEventListener('theme-change', (e: any) => {
+    const theme = e.detail?.theme || getCurrentTheme();
+    updateGiscusTheme(theme);
+  });
+</script>
 
 <style>
   .giscus-wrapper {
