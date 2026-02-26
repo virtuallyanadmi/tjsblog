@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Giscus from '../../components/Giscus.astro';
 import { getAllPosts, getPostBySlug, urlFor } from '../../lib/sanity';
 import { formatDate, getCategoryIcon } from '../../lib/utils';
 import { renderPortableText } from '../../lib/portableText';
@@ -156,6 +157,11 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
         </div>
       </section>
     )}
+
+    <!-- Comments Section -->
+    <div class="container-custom max-w-3xl">
+      <Giscus />
+    </div>
 
     <!-- Back to Blog -->
     <div class="container-custom max-w-3xl py-8">

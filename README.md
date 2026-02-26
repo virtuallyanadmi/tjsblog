@@ -169,6 +169,68 @@ You have two options for receiving contact form submissions:
 
 ---
 
+## 💬 Setting Up Giscus Comments
+
+Giscus is a comments system powered by GitHub Discussions. It's free, requires no database, and integrates seamlessly with GitHub.
+
+### Step 1: Enable GitHub Discussions
+
+1. Go to your GitHub repository settings
+2. Scroll to the **Features** section
+3. Check **"Discussions"** to enable it
+4. Click **"Set up discussions"** when prompted
+
+### Step 2: Create a Discussion Category
+
+1. Go to your repository's **Discussions** tab
+2. Click the **gear icon** ⚙️ next to Categories
+3. Create a new category called **"Blog Comments"**:
+   - **Category name:** `Blog Comments`
+   - **Discussion Format:** Choose **"Announcement"** (only maintainers can create, but anyone can reply)
+   - **Description:** `Comments on blog posts`
+4. Click **"Create category"**
+
+### Step 3: Configure Giscus
+
+1. Visit [giscus.app](https://giscus.app)
+2. Fill in the configuration form:
+   - **Repository:** Enter your repo (e.g., `yourusername/thejonathanstewart-blog`)
+   - **Page ↔️ Discussions Mapping:** Select **"Discussion title contains page `pathname`"**
+   - **Discussion Category:** Select **"Blog Comments"**
+   - **Features:** Enable **"Enable reactions for the main post"**
+   - **Theme:** Select **"GitHub Light"** (matches the blog's light theme)
+3. Scroll down to see the generated `<script>` tag
+4. Copy these values from the script:
+   - `data-repo` → `PUBLIC_GISCUS_REPO`
+   - `data-repo-id` → `PUBLIC_GISCUS_REPO_ID`
+   - `data-category` → `PUBLIC_GISCUS_CATEGORY`
+   - `data-category-id` → `PUBLIC_GISCUS_CATEGORY_ID`
+
+### Step 4: Add Environment Variables
+
+Add to your `.env` file:
+
+```env
+# Giscus Comments
+PUBLIC_GISCUS_REPO=yourusername/thejonathanstewart-blog
+PUBLIC_GISCUS_REPO_ID=R_kgDO...  # From giscus.app
+PUBLIC_GISCUS_CATEGORY=Blog Comments
+PUBLIC_GISCUS_CATEGORY_ID=DIC_kwDO...  # From giscus.app
+```
+
+### Step 5: Add to Cloudflare Pages
+
+Don't forget to add these environment variables to your Cloudflare Pages deployment settings as well.
+
+**Features:**
+- ✅ Free and open source
+- ✅ No tracking, no ads
+- ✅ Lazy loading for performance
+- ✅ Powered by GitHub Discussions
+- ✅ Supports reactions and replies
+
+---
+
 ## ☁️ Deploying to Cloudflare Pages
 
 ### Step 1: Push to GitHub
@@ -210,6 +272,10 @@ git push -u origin main
    - `PUBLIC_SANITY_API_VERSION`
    - `PUBLIC_WEB3FORMS_ACCESS_KEY` (or `PUBLIC_FORMSPREE_ID`)
    - `PUBLIC_SITE_URL`
+   - `PUBLIC_GISCUS_REPO` (optional - for comments)
+   - `PUBLIC_GISCUS_REPO_ID` (optional - for comments)
+   - `PUBLIC_GISCUS_CATEGORY` (optional - for comments)
+   - `PUBLIC_GISCUS_CATEGORY_ID` (optional - for comments)
 
 7. Click **"Save and Deploy"**
 
@@ -263,7 +329,8 @@ thejonathanstewart-blog/
 │   │   ├── BlogCard.astro
 │   │   ├── CategoryFilter.astro
 │   │   ├── ContactForm.astro
-│   │   └── FocusAreas.astro
+│   │   ├── FocusAreas.astro
+│   │   └── Giscus.astro    # Comments component
 │   ├── layouts/            # Page layouts
 │   │   └── BaseLayout.astro
 │   ├── lib/                # Utilities & Sanity client
@@ -320,6 +387,10 @@ thejonathanstewart-blog/
 | `PUBLIC_WEB3FORMS_ACCESS_KEY` | Conditional | Web3Forms access key |
 | `PUBLIC_FORMSPREE_ID` | Conditional | Formspree form ID |
 | `PUBLIC_SITE_URL` | Yes | Production site URL |
+| `PUBLIC_GISCUS_REPO` | No | GitHub repo for comments (owner/repo) |
+| `PUBLIC_GISCUS_REPO_ID` | No | Giscus repository ID |
+| `PUBLIC_GISCUS_CATEGORY` | No | Discussion category name |
+| `PUBLIC_GISCUS_CATEGORY_ID` | No | Giscus category ID |
 
 ---
 
@@ -333,7 +404,7 @@ This codebase is designed to be easily extended. Here are some planned features:
 - [ ] **Dark Mode** - Toggle between light/dark themes
 - [ ] **Search** - Full-text search across posts
 - [ ] **RSS Feed** - For blog syndication
-- [ ] **Comments** - Blog post comments (Disqus/Giscus)
+- [x] **Comments** - Blog post comments via Giscus (GitHub Discussions)
 
 ---
 
