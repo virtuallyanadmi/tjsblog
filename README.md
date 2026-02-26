@@ -37,7 +37,7 @@ Before you begin, ensure you have:
 ### 1. Clone the Repository
 
 ```bash
-git clone [[https://github.com/yourusername/thejonathanstewart-blog.git](https://github.com/virtuallyanadmi/tjsblog.git)
+git clone https://github.com/virtuallyanadmi/tjsblog.git
 cd thejonathanstewart-blog
 ```
 
