@@ -8,7 +8,7 @@ A professional blog built with **Astro** and **Sanity CMS**, focused on cloud ef
 
 ## 🚀 Features
 
-- **Static Site Generation** with Astro for blazing-fast performance
+- **Server-Side Rendering** with Astro + Cloudflare Workers for dynamic content
 - **Headless CMS** powered by Sanity for easy content management
 - **Blog** with category filtering (Cloud, AI, Leadership)
 - **Professional Design** with Tailwind CSS
@@ -16,7 +16,7 @@ A professional blog built with **Astro** and **Sanity CMS**, focused on cloud ef
 - **Fully Responsive** mobile-first design
 - **SEO Optimized** with meta tags, Open Graph, and sitemap
 - **Contact Form** with email notifications
-- **Easy Deployment** to Cloudflare Pages
+- **Edge Deployment** to Cloudflare Workers via Wrangler
 
 ---
 
@@ -232,9 +232,16 @@ Don't forget to add these environment variables to your Cloudflare Pages deploym
 
 ---
 
-## ☁️ Deploying to Cloudflare Pages
+## ☁️ Deploying to Cloudflare Workers/Pages with Wrangler
 
-> **Note:** This site is deployed using **Cloudflare Pages** (not Cloudflare Workers). Cloudflare Pages is optimized for static sites and provides automatic builds from Git. No `wrangler.toml` or `wrangler deploy` commands are needed for static Astro sites.
+This site uses **Cloudflare Workers** with the **@astrojs/cloudflare** adapter for server-side rendering at the edge. Deployment is handled via **Wrangler**.
+
+### Architecture
+
+- **@astrojs/cloudflare** adapter enables SSR on Cloudflare Workers
+- **Wrangler** handles deployment and local preview
+- **wrangler.toml** contains the Worker configuration
+- Build output goes to `dist/` with a `_worker.js` entry point
 
 ### ⚠️ First-Time Deployment (Without Sanity Configuration)
 
@@ -256,8 +263,6 @@ During the build, you'll see a warning if Sanity isn't configured:
 - Blog pages will show "No posts found" messages
 - Author sections will use default placeholder data
 - Comments won't work until Giscus is configured
-
-After deployment, add the environment variables in Cloudflare Pages dashboard and trigger a new build.
 
 ### Step 1: Push to GitHub
 
@@ -291,19 +296,20 @@ After selecting your repository, configure the build settings:
 
 | Setting | Value |
 |---------|-------|
-| **Project name** | `tjsblog` (or your preferred name) |
+| **Project name** | `blog` (matches wrangler.toml name) |
 | **Production branch** | `main` |
 | **Framework preset** | `Astro` |
 | **Build command** | `npm run build` |
 | **Build output directory** | `dist` |
+| **Deploy command** | `npx wrangler deploy` |
 | **Root directory** | `/` (leave empty or `/`) |
 
 #### Important Build Settings Notes:
 
-- **Framework preset:** Selecting "Astro" auto-fills the build command and output directory
-- **Build output directory:** Must be `dist` (Astro's default output folder)
-- **Root directory:** Leave as `/` since `package.json` is in the repository root
-- **Do NOT use** `npx wrangler deploy` - that's for Cloudflare Workers, not Pages
+- **Framework preset:** Selecting "Astro" helps auto-detect settings
+- **Build output directory:** Must be `dist` (Astro's output folder)
+- **Deploy command:** `npx wrangler deploy` deploys to Cloudflare Workers
+- The project includes `wrangler.toml` with the Worker configuration
 
 ### Step 4: Add Environment Variables
 
@@ -328,11 +334,11 @@ Click **"Environment variables"** to expand the section and add:
 
 1. Click **"Save and Deploy"**
 2. Wait for the build to complete (usually 1-3 minutes)
-3. Once deployed, you'll get a URL like `https://tjsblog.pages.dev`
+3. Once deployed, you'll get a URL like `https://blog.going2timbuktu.workers.dev`
 
 ### Step 6: Set Up Custom Domain
 
-1. In Cloudflare Pages, go to your project
+1. In Cloudflare Workers & Pages, go to your project
 2. Click **"Custom domains"** tab
 3. Click **"Set up a custom domain"**
 4. Enter `thejonathanstewart.com`
@@ -340,6 +346,32 @@ Click **"Environment variables"** to expand the section and add:
    - If your domain is already on Cloudflare: DNS records are added automatically
    - If your domain is elsewhere: Add the CNAME record shown
 6. Also add `www.thejonathanstewart.com` as an additional domain
+
+### Local Development with Wrangler
+
+```bash
+# Install dependencies
+npm install
+
+# Start Astro dev server (standard development)
+npm run dev
+
+# Preview with Wrangler (simulates Cloudflare Workers environment)
+npm run preview
+```
+
+### Manual Deployment
+
+If you need to deploy manually:
+
+```bash
+# Build and deploy
+npm run deploy
+
+# Or step by step:
+npm run build
+npx wrangler deploy
+```
 
 ### Automatic Deployments
 
@@ -350,7 +382,7 @@ Once connected, Cloudflare Pages automatically:
 
 ---
 
-## 🔧 Troubleshooting Cloudflare Pages
+## 🔧 Troubleshooting Cloudflare Deployment
 
 ### Common Build Issues
 
@@ -373,29 +405,32 @@ Once connected, Cloudflare Pages automatically:
 - **Cause:** Missing or incorrect Sanity environment variables
 - **Fix:**
   1. Verify `PUBLIC_SANITY_PROJECT_ID` is correct
-  2. Check that CORS is configured in Sanity for your Cloudflare Pages URL
+  2. Check that CORS is configured in Sanity for your Cloudflare Workers URL
   3. In Sanity dashboard → API → CORS Origins, add:
-     - `https://tjsblog.pages.dev`
+     - `https://blog.going2timbuktu.workers.dev`
      - `https://thejonathanstewart.com`
 
-#### 404 errors on page refresh
-- **Cause:** This shouldn't happen with static output mode
-- **Fix:** Ensure `astro.config.mjs` has `output: 'static'`
+#### Wrangler deploy fails
+- **Cause:** Missing wrangler.toml or @astrojs/cloudflare adapter
+- **Fix:** 
+  - Ensure `wrangler.toml` is in the repository root
+  - Verify `@astrojs/cloudflare` is in dependencies
+  - Check that `astro.config.mjs` has `output: 'server'` and the cloudflare adapter
 
 ### Clearing Build Cache
 
 If you encounter persistent build issues:
-1. Go to your Cloudflare Pages project
-2. Navigate to **Settings** → **Builds & deployments**
-3. Click **"Clear build cache"**
+1. Go to your Cloudflare Workers & Pages project
+2. Navigate to **Settings** → **Build**
+3. Click **"Clear Cache"**
 4. Trigger a new deployment
 
 ### Viewing Build Logs
 
 To debug build failures:
-1. Go to your Cloudflare Pages project
+1. Go to your Cloudflare Workers & Pages project
 2. Click on the failed deployment
-3. Click **"View logs"** to see detailed build output
+3. Click **"View build"** to see detailed build output
 
 ---
 
@@ -472,8 +507,10 @@ thejonathanstewart-blog/
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start Astro development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
+| `npm run build` | Build for production (with TypeScript check) |
+| `npm run preview` | Preview with Wrangler (Cloudflare Workers env) |
+| `npm run deploy` | Build and deploy to Cloudflare Workers |
+| `npm run cf-typegen` | Generate Cloudflare Workers types |
 | `npm run sanity:dev` | Start Sanity Studio locally |
 | `npm run sanity:deploy` | Deploy Sanity Studio |
 
