@@ -26,12 +26,21 @@ export const serverClient = createClient({
   token: process.env.SANITY_API_TOKEN,
 });
 
-const builder = imageUrlBuilder(client);
+const builder = client ? imageUrlBuilder(client) : null;
 
 // whether we have the minimum configuration to use Sanity
 const isSanityConfigured = Boolean(projectId) && !!client;
 
 export function urlFor(source: SanityImageSource) {
+  if (!builder) {
+    // return a dummy object with url() so callers don't crash
+    return {
+      width: () => ({ url: () => '' }),
+      height: () => ({ url: () => '' }),
+      url: () => '',
+    } as any;
+  }
+
   return builder.image(source);
 }
 
