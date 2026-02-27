@@ -2,12 +2,18 @@ import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
-export const client = createClient({
-  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
-  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: import.meta.env.PUBLIC_SANITY_API_VERSION || '2024-01-01',
-  useCdn: true,
-});
+// only instantiate if we actually have a project id; undefined projectId
+// causes the Sanity client to throw at import time which will crash the worker
+const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID;
+
+export const client = projectId
+  ? createClient({
+      projectId,
+      dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
+      apiVersion: import.meta.env.PUBLIC_SANITY_API_VERSION || '2024-01-01',
+      useCdn: true,
+    })
+  : null;
 
 // optional server-side client (using a private token) for previewing drafts
 // - create a read token in Sanity project settings -> API
@@ -23,7 +29,7 @@ export const serverClient = createClient({
 const builder = imageUrlBuilder(client);
 
 // whether we have the minimum configuration to use Sanity
-const isSanityConfigured = Boolean(import.meta.env.PUBLIC_SANITY_PROJECT_ID);
+const isSanityConfigured = Boolean(projectId) && !!client;
 
 export function urlFor(source: SanityImageSource) {
   return builder.image(source);
