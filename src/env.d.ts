@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly PUBLIC_WEB3FORMS_ACCESS_KEY: string;
   readonly PUBLIC_FORMSPREE_ID: string;
   readonly PUBLIC_SITE_URL: string;
+  readonly PUBLIC_IMAGE_CDN_URL: string;
   // Giscus Comments (GitHub Discussions)
   readonly PUBLIC_GISCUS_REPO: string;
   readonly PUBLIC_GISCUS_REPO_ID: string;

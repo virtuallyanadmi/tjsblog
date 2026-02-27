@@ -11,8 +11,30 @@ export const client = createClient({
 
 const builder = imageUrlBuilder(client);
 
+const IMAGE_CDN_URL = import.meta.env.PUBLIC_IMAGE_CDN_URL || '';
+
 export function urlFor(source: SanityImageSource) {
-  return builder.image(source);
+  const img = builder.image(source);
+
+  if (!IMAGE_CDN_URL) return img;
+
+  // Return a proxy that preserves the builder's chainable API
+  // but rewrites the final `.url()` result to use the custom CDN origin.
+  const originalUrl = img.url.bind(img);
+
+  // `any` because the builder has a fluent API with many methods.
+  return new Proxy(img as any, {
+    get(target, prop, receiver) {
+      if (prop === 'url') {
+        return (...args: any[]) => {
+          const url = originalUrl(...args);
+          return url.replace(/^https?:\/\/cdn\.sanity\.io/, IMAGE_CDN_URL);
+        };
+      }
+      const val = Reflect.get(target, prop, receiver);
+      return typeof val === 'function' ? val.bind(target) : val;
+    }
+  }) as any;
 }
 
 // GROQ Queries

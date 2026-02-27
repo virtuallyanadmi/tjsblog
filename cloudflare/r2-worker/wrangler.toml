@@ -1,0 +1,11 @@
+name = "tjsblog-images-proxy"
+main = "worker.js"
+account_id = "0ad226070db45ae33b6177b9428f14c9"
+compatibility_date = "2026-02-26"
+
+# Uncomment and set routes if you want Wrangler to deploy with a route.
+# routes = ["images.thejonathanstewart.com/*"]
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "tjsblog-images"
