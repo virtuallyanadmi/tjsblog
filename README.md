@@ -241,19 +241,38 @@ entire set is replaced – any variables not present in the form are removed, so
 always make sure the list contains everything you need before saving.
 
 There is no built‑in Wrangler command to add/update multiple Pages variables at
-once; the CLI exposes only the `wrangler pages secret` subcommand for
-secrets. If you want to script updates you can either:
+once; the CLI exposes only the `wrangler pages secret` subcommand for secrets.
+To avoid editing the dashboard every time you add a value, we've included a
+helper script in this repo that pushes your `.env` file up to Cloudflare using
+the REST API:
 
-1. Use the Cloudflare REST API directly (`/accounts/:account_id/pages/projects/:project_name/environment/variables`),
-   or
-2. Continue editing the dashboard and then pull the values manually via `wrangler
-   pages download config` (which includes envs) and merge them with your
-   local `.env` file using a simple script.
+```js
+// scripts/sync-env.js
+// (reads .env and PUTs /accounts/:id/pages/projects/:name/environment/variables)
+```
 
-Because of that, we recommend treating the dashboard as the source of truth and
-not relying on automatic sync tools. Your local `.env` file is just a convenience
-for development – if it gets overwritten, just re‑copy the vars from the
-dashboard.
+To use it you need three additional env vars in your local shell or CI:
+
+```sh
+CF_ACCOUNT_ID=…       # your Cloudflare account ID
+CF_PAGES_PROJECT=…     # Pages project name (e.g. "blog")
+CF_API_TOKEN=…         # API token with "Pages Read"+"Pages Write" permissions
+```
+
+Then run:
+
+```bash
+npm run sync-env    # push .env contents to the Pages project
+```
+
+and the script will upload every key/value pair, marking those beginning with
+`PUBLIC_` as plain text and the rest as secrets. You can safely commit your
+`.env` (or keep it out of git) and the build script now runs `sync-env` before
+`build` so the remote environment is always up to date.
+
+If you don't want to use the script, you can still manage variables manually in
+the dashboard or via the REST API yourself, but this utility makes it a one‑time
+operation per update.
 
 
 This site uses **Cloudflare Workers** with the **@astrojs/cloudflare** adapter for server-side rendering at the edge. Deployment is handled via **Wrangler**.
