@@ -234,27 +234,26 @@ Don't forget to add these environment variables to your Cloudflare Pages deploym
 
 ## ☁️ Deploying to Cloudflare Workers/Pages with Wrangler
 
-### Environment variable sync
-Cloudflare's dashboard replaces the full set of variables when you save. To keep your
-local `.env` file and your remote environment in sync you can use Wrangler's env
-commands – **you can run them with `npx wrangler@latest`** so they work even if your
-local project uses v3. The examples below already use `npx`, avoiding any
-version mismatch.
+### Environment variables
+All runtime variables (both public and secrets) are currently managed through
+the Cloudflare dashboard. When you edit the list there and click **Save**, the
+entire set is replaced – any variables not present in the form are removed, so
+always make sure the list contains everything you need before saving.
 
-```bash
-# using the global/updated binary
-wrangler pages env pull .env    # bring remote vars into .env
-wrangler pages env push .env    # push updated file back to Cloudflare
+There is no built‑in Wrangler command to add/update multiple Pages variables at
+once; the CLI exposes only the `wrangler pages secret` subcommand for
+secrets. If you want to script updates you can either:
 
-# or use npx to grab the latest version on the fly
-npx wrangler@latest pages env pull .env
-npx wrangler@latest pages env push .env
-```
+1. Use the Cloudflare REST API directly (`/accounts/:account_id/pages/projects/:project_name/environment/variables`),
+   or
+2. Continue editing the dashboard and then pull the values manually via `wrangler
+   pages download config` (which includes envs) and merge them with your
+   local `.env` file using a simple script.
 
-The npm scripts below already call `npx wrangler@latest` to avoid this mismatch.
-
-If you prefer not to upgrade or can't use v4, simply manage the environment
-variables directly in the Cloudflare dashboard or with `wrangler secret put`.
+Because of that, we recommend treating the dashboard as the source of truth and
+not relying on automatic sync tools. Your local `.env` file is just a convenience
+for development – if it gets overwritten, just re‑copy the vars from the
+dashboard.
 
 
 This site uses **Cloudflare Workers** with the **@astrojs/cloudflare** adapter for server-side rendering at the edge. Deployment is handled via **Wrangler**.
