@@ -237,9 +237,9 @@ Don't forget to add these environment variables to your Cloudflare Pages deploym
 ### Environment variable sync
 Cloudflare's dashboard replaces the full set of variables when you save. To keep your
 local `.env` file and your remote environment in sync you can use Wrangler's env
-commands – **these require Wrangler v4+**. If your local project still depends on
-v3 (as installed in `package.json`), either upgrade the dependency or invoke the
-global CLI directly (which you can install via `npm install -g wrangler`).
+commands – **you can run them with `npx wrangler@latest`** so they work even if your
+local project uses v3. The examples below already use `npx`, avoiding any
+version mismatch.
 
 ```bash
 # using the global/updated binary
