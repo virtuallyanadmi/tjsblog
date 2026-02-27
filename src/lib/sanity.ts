@@ -1,4 +1,4 @@
-import { createClient, type SanityClient } from '@sanity/client';
+import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
@@ -9,7 +9,21 @@ export const client = createClient({
   useCdn: true,
 });
 
+// optional server-side client (using a private token) for previewing drafts
+// - create a read token in Sanity project settings -> API
+// - set it as SANITY_API_TOKEN in your environment (server-only)
+export const serverClient = createClient({
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
+  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: import.meta.env.PUBLIC_SANITY_API_VERSION || '2024-01-01',
+  useCdn: false,
+  token: process.env.SANITY_API_TOKEN,
+});
+
 const builder = imageUrlBuilder(client);
+
+// whether we have the minimum configuration to use Sanity
+const isSanityConfigured = Boolean(import.meta.env.PUBLIC_SANITY_PROJECT_ID);
 
 export function urlFor(source: SanityImageSource) {
   return builder.image(source);

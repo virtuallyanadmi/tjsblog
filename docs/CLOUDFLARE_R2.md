@@ -33,16 +33,19 @@ npm install --save-dev wrangler
 4. Bind the bucket and deploy
 
 ```bash
-# login once
+# login once (if not already authenticated)
 wrangler login
-# publish the worker
+# deploy the worker from its folder
 cd cloudflare/r2-worker
-wrangler publish
+wrangler deploy
 ```
 
-5. Add a custom domain for the Worker (recommended)
-- Dashboard -> Workers -> Your Worker -> Add route -> `images.thejonathanstewart.com/*`
-- Add DNS: create a CNAME `images` pointing to `workers.dev` subdomain or follow Cloudflare's custom domain flow
+- Add a custom domain for the Worker (recommended):
+  1. Dashboard -> Workers -> Your Worker -> Add route -> `images.thejonathanstewart.com/*`.
+  2. In Cloudflare DNS for `thejonathanstewart.com`, create a CNAME record:
+     - **Name**: `images`
+     - **Target**: the `*.workers.dev` subdomain shown for your Worker (e.g. `tjsblog-images-proxy.going2timbuktu.workers.dev`).
+     - Enable proxying (orange cloud) to ensure TLS and routing.
 
 6. Set `PUBLIC_IMAGE_CDN_URL` in your Astro host to `https://images.thejonathanstewart.com`
 - Vercel/Netlify/Cloudflare Pages: add env var in project settings
