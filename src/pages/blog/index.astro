@@ -8,8 +8,8 @@ import { getAllPosts, getAllCategories, getPostsByCategory } from '../../lib/san
 const categorySlug = Astro.url.searchParams.get('category');
 
 // Fetch data
-let posts = [];
-let categories = [];
+let posts: any[] = [];
+let categories: any[] = [];
 
 try {
   categories = await getAllCategories();

@@ -1,4 +1,4 @@
-import { createClient } from '@sanity/client';
+import { createClient, type SanityClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
@@ -11,30 +11,8 @@ export const client = createClient({
 
 const builder = imageUrlBuilder(client);
 
-const IMAGE_CDN_URL = import.meta.env.PUBLIC_IMAGE_CDN_URL || '';
-
 export function urlFor(source: SanityImageSource) {
-  const img = builder.image(source);
-
-  if (!IMAGE_CDN_URL) return img;
-
-  // Return a proxy that preserves the builder's chainable API
-  // but rewrites the final `.url()` result to use the custom CDN origin.
-  const originalUrl = img.url.bind(img);
-
-  // `any` because the builder has a fluent API with many methods.
-  return new Proxy(img as any, {
-    get(target, prop, receiver) {
-      if (prop === 'url') {
-        return (...args: any[]) => {
-          const url = originalUrl(...args);
-          return url.replace(/^https?:\/\/cdn\.sanity\.io/, IMAGE_CDN_URL);
-        };
-      }
-      const val = Reflect.get(target, prop, receiver);
-      return typeof val === 'function' ? val.bind(target) : val;
-    }
-  }) as any;
+  return builder.image(source);
 }
 
 // GROQ Queries
@@ -185,35 +163,48 @@ export const queries = {
   }`,
 };
 
-// Fetch functions
+// Helper to safely fetch from Sanity
+async function safeFetch<T>(query: string, defaultValue: T): Promise<T> {
+  if (!isSanityConfigured || !client) {
+    return defaultValue;
+  }
+  try {
+    return await client.fetch(query);
+  } catch (error) {
+    console.error('Sanity fetch error:', error);
+    return defaultValue;
+  }
+}
+
+// Fetch functions with graceful fallbacks
 export async function getAllPosts() {
-  return await client.fetch(queries.allPosts);
+  return safeFetch(queries.allPosts, []);
 }
 
 export async function getFeaturedPosts() {
-  return await client.fetch(queries.featuredPosts);
+  return safeFetch(queries.featuredPosts, []);
 }
 
 export async function getRecentPosts() {
-  return await client.fetch(queries.recentPosts);
+  return safeFetch(queries.recentPosts, []);
 }
 
 export async function getPostBySlug(slug: string) {
-  return await client.fetch(queries.postBySlug(slug));
+  return safeFetch(queries.postBySlug(slug), null);
 }
 
 export async function getPostsByCategory(categorySlug: string) {
-  return await client.fetch(queries.postsByCategory(categorySlug));
+  return safeFetch(queries.postsByCategory(categorySlug), []);
 }
 
 export async function getAllCategories() {
-  return await client.fetch(queries.allCategories);
+  return safeFetch(queries.allCategories, []);
 }
 
 export async function getAuthor() {
-  return await client.fetch(queries.author);
+  return safeFetch(queries.author, null);
 }
 
 export async function getSiteSettings() {
-  return await client.fetch(queries.siteSettings);
+  return safeFetch(queries.siteSettings, null);
 }

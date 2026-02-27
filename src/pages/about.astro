@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getAuthor, urlFor } from '../lib/sanity';
 
-let author = null;
+let author: any = null;
 try {
   author = await getAuthor();
 } catch (error) {

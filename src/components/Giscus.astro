@@ -47,6 +47,7 @@ const {
 
 // Check if Giscus is configured
 const isConfigured = repo && repoId && categoryId;
+const isDev = import.meta.env.DEV;
 ---
 
 {isConfigured ? (
@@ -68,29 +69,26 @@ const isConfigured = repo && repoId && categoryId;
       />
     </div>
   </section>
-) : (
-  <!-- Giscus not configured - show nothing in production, helpful message in dev -->
-  import.meta.env.DEV && (
-    <section class="giscus-comments mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-        <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
-          📝 Giscus Comments Not Configured
-        </h3>
-        <p class="text-yellow-700 dark:text-yellow-300 text-sm">
-          To enable comments, configure the following environment variables:
-        </p>
-        <ul class="list-disc list-inside text-yellow-700 dark:text-yellow-300 text-sm mt-2 space-y-1">
-          <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_REPO</code> - Your GitHub repo (owner/repo)</li>
-          <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_REPO_ID</code> - Repository ID</li>
-          <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_CATEGORY_ID</code> - Category ID</li>
-        </ul>
-        <p class="text-yellow-700 dark:text-yellow-300 text-sm mt-2">
-          Visit <a href="https://giscus.app" class="underline hover:text-yellow-900 dark:hover:text-yellow-100" target="_blank" rel="noopener">giscus.app</a> to get these values.
-        </p>
-      </div>
-    </section>
-  )
-)}
+) : isDev ? (
+  <section class="giscus-comments mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+    <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+      <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+        📝 Giscus Comments Not Configured
+      </h3>
+      <p class="text-yellow-700 dark:text-yellow-300 text-sm">
+        To enable comments, configure the following environment variables:
+      </p>
+      <ul class="list-disc list-inside text-yellow-700 dark:text-yellow-300 text-sm mt-2 space-y-1">
+        <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_REPO</code> - Your GitHub repo (owner/repo)</li>
+        <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_REPO_ID</code> - Repository ID</li>
+        <li><code class="bg-yellow-100 dark:bg-yellow-800 px-1 rounded">PUBLIC_GISCUS_CATEGORY_ID</code> - Category ID</li>
+      </ul>
+      <p class="text-yellow-700 dark:text-yellow-300 text-sm mt-2">
+        Visit <a href="https://giscus.app" class="underline hover:text-yellow-900 dark:hover:text-yellow-100" target="_blank" rel="noopener">giscus.app</a> to get these values.
+      </p>
+    </div>
+  </section>
+) : null}
 
 <script>
   // Get current theme

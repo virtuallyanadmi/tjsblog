@@ -8,7 +8,7 @@ A professional blog built with **Astro** and **Sanity CMS**, focused on cloud ef
 
 ## 🚀 Features
 
-- **Static Site Generation** with Astro for blazing-fast performance
+- **Server-Side Rendering** with Astro + Cloudflare Workers for dynamic content
 - **Headless CMS** powered by Sanity for easy content management
 - **Blog** with category filtering (Cloud, AI, Leadership)
 - **Professional Design** with Tailwind CSS
@@ -16,7 +16,7 @@ A professional blog built with **Astro** and **Sanity CMS**, focused on cloud ef
 - **Fully Responsive** mobile-first design
 - **SEO Optimized** with meta tags, Open Graph, and sitemap
 - **Contact Form** with email notifications
-- **Easy Deployment** to Cloudflare Pages
+- **Edge Deployment** to Cloudflare Workers via Wrangler
 
 ---
 
@@ -232,7 +232,37 @@ Don't forget to add these environment variables to your Cloudflare Pages deploym
 
 ---
 
-## ☁️ Deploying to Cloudflare Pages
+## ☁️ Deploying to Cloudflare Workers/Pages with Wrangler
+
+This site uses **Cloudflare Workers** with the **@astrojs/cloudflare** adapter for server-side rendering at the edge. Deployment is handled via **Wrangler**.
+
+### Architecture
+
+- **@astrojs/cloudflare** adapter enables SSR on Cloudflare Workers
+- **Wrangler** handles deployment and local preview
+- **wrangler.toml** contains the Worker configuration
+- Build output goes to `dist/` with a `_worker.js` entry point
+
+### ⚠️ First-Time Deployment (Without Sanity Configuration)
+
+**Good news!** The site is designed to build and deploy successfully even without Sanity CMS configured. This allows you to:
+
+1. **Deploy first, configure later** - Get your site live immediately
+2. **See the site structure** - All pages render with placeholder content
+3. **Add Sanity later** - Simply add environment variables and redeploy
+
+During the build, you'll see a warning if Sanity isn't configured:
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        SANITY CMS NOT CONFIGURED                          ║
+║ The site will build successfully, but blog content will not be available. ║
+╚════════════════════════════════════════════════════════════════════════════╝
+```
+
+**This is expected for first-time deployments!** The site will work, but:
+- Blog pages will show "No posts found" messages
+- Author sections will use default placeholder data
+- Comments won't work until Giscus is configured
 
 ### Step 1: Push to GitHub
 
@@ -255,39 +285,152 @@ git push -u origin main
 ### Step 2: Connect to Cloudflare Pages
 
 1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com/)
-2. Navigate to **Pages** in the sidebar
-3. Click **"Create a project"** → **"Connect to Git"**
-4. Select your GitHub repository
-5. Configure build settings:
+2. Navigate to **Workers & Pages** in the sidebar
+3. Click **"Create"** → Select the **"Pages"** tab → **"Connect to Git"**
+4. Authorize Cloudflare to access your GitHub account (if not already)
+5. Select the repository: `virtuallyanadmi/tjsblog`
 
-   | Setting | Value |
-   |---------|-------|
-   | Framework preset | Astro |
-   | Build command | `npm run build` |
-   | Build output directory | `dist` |
-   | Node.js version | `18` |
+### Step 3: Configure Build Settings
 
-6. Add **Environment Variables**:
-   - `PUBLIC_SANITY_PROJECT_ID`
-   - `PUBLIC_SANITY_DATASET`
-   - `PUBLIC_SANITY_API_VERSION`
-   - `PUBLIC_WEB3FORMS_ACCESS_KEY` (or `PUBLIC_FORMSPREE_ID`)
-   - `PUBLIC_SITE_URL`
-   - `PUBLIC_GISCUS_REPO` (optional - for comments)
-   - `PUBLIC_GISCUS_REPO_ID` (optional - for comments)
-   - `PUBLIC_GISCUS_CATEGORY` (optional - for comments)
-   - `PUBLIC_GISCUS_CATEGORY_ID` (optional - for comments)
+After selecting your repository, configure the build settings:
 
-7. Click **"Save and Deploy"**
+| Setting | Value |
+|---------|-------|
+| **Project name** | `blog` (matches wrangler.toml name) |
+| **Production branch** | `main` |
+| **Framework preset** | `Astro` |
+| **Build command** | `npm run build` |
+| **Build output directory** | `dist` |
+| **Deploy command** | `npx wrangler deploy` |
+| **Root directory** | `/` (leave empty or `/`) |
 
-### Step 3: Set Up Custom Domain
+#### Important Build Settings Notes:
 
-1. In Cloudflare Pages, go to your project
+- **Framework preset:** Selecting "Astro" helps auto-detect settings
+- **Build output directory:** Must be `dist` (Astro's output folder)
+- **Deploy command:** `npx wrangler deploy` deploys to Cloudflare Workers
+- The project includes `wrangler.toml` with the Worker configuration
+
+### Step 4: Add Environment Variables
+
+Click **"Environment variables"** to expand the section and add:
+
+| Variable | Value | Required |
+|----------|-------|----------|
+| `PUBLIC_SANITY_PROJECT_ID` | Your Sanity project ID | ✅ Yes |
+| `PUBLIC_SANITY_DATASET` | `production` | ✅ Yes |
+| `PUBLIC_SANITY_API_VERSION` | `2024-01-01` | ✅ Yes |
+| `PUBLIC_SITE_URL` | `https://thejonathanstewart.com` | ✅ Yes |
+| `PUBLIC_WEB3FORMS_ACCESS_KEY` | Your Web3Forms key | Conditional |
+| `PUBLIC_FORMSPREE_ID` | Your Formspree ID | Conditional |
+| `PUBLIC_GISCUS_REPO` | `virtuallyanadmi/tjsblog` | Optional |
+| `PUBLIC_GISCUS_REPO_ID` | From giscus.app | Optional |
+| `PUBLIC_GISCUS_CATEGORY` | `Blog Comments` | Optional |
+| `PUBLIC_GISCUS_CATEGORY_ID` | From giscus.app | Optional |
+
+> **Tip:** You can add environment variables for both "Production" and "Preview" environments. Variables prefixed with `PUBLIC_` are exposed to the browser.
+
+### Step 5: Deploy
+
+1. Click **"Save and Deploy"**
+2. Wait for the build to complete (usually 1-3 minutes)
+3. Once deployed, you'll get a URL like `https://blog.going2timbuktu.workers.dev`
+
+### Step 6: Set Up Custom Domain
+
+1. In Cloudflare Workers & Pages, go to your project
 2. Click **"Custom domains"** tab
 3. Click **"Set up a custom domain"**
 4. Enter `thejonathanstewart.com`
-5. Follow the DNS configuration instructions
-6. Also add `www.thejonathanstewart.com` if desired
+5. Follow the DNS configuration instructions:
+   - If your domain is already on Cloudflare: DNS records are added automatically
+   - If your domain is elsewhere: Add the CNAME record shown
+6. Also add `www.thejonathanstewart.com` as an additional domain
+
+### Local Development with Wrangler
+
+```bash
+# Install dependencies
+npm install
+
+# Start Astro dev server (standard development)
+npm run dev
+
+# Preview with Wrangler (simulates Cloudflare Workers environment)
+npm run preview
+```
+
+### Manual Deployment
+
+If you need to deploy manually:
+
+```bash
+# Build and deploy
+npm run deploy
+
+# Or step by step:
+npm run build
+npx wrangler deploy
+```
+
+### Automatic Deployments
+
+Once connected, Cloudflare Pages automatically:
+- ✅ Builds and deploys when you push to `main`
+- ✅ Creates preview deployments for pull requests
+- ✅ Provides unique URLs for each preview deployment
+
+---
+
+## 🔧 Troubleshooting Cloudflare Deployment
+
+### Common Build Issues
+
+#### Build fails with "npm ERR!"
+- **Cause:** Dependency installation issues
+- **Fix:** Ensure `package-lock.json` is committed to the repository
+
+#### Build fails with "astro check" errors
+- **Cause:** TypeScript errors in the code
+- **Fix:** Run `npm run build` locally first to identify and fix errors
+
+#### Environment variables not working
+- **Cause:** Variables not prefixed with `PUBLIC_` or not added in Cloudflare
+- **Fix:** 
+  - Ensure all client-side variables start with `PUBLIC_`
+  - Verify variables are added in Cloudflare Pages dashboard
+  - Redeploy after adding/updating variables
+
+#### Sanity content not showing
+- **Cause:** Missing or incorrect Sanity environment variables
+- **Fix:**
+  1. Verify `PUBLIC_SANITY_PROJECT_ID` is correct
+  2. Check that CORS is configured in Sanity for your Cloudflare Workers URL
+  3. In Sanity dashboard → API → CORS Origins, add:
+     - `https://blog.going2timbuktu.workers.dev`
+     - `https://thejonathanstewart.com`
+
+#### Wrangler deploy fails
+- **Cause:** Missing wrangler.toml or @astrojs/cloudflare adapter
+- **Fix:** 
+  - Ensure `wrangler.toml` is in the repository root
+  - Verify `@astrojs/cloudflare` is in dependencies
+  - Check that `astro.config.mjs` has `output: 'server'` and the cloudflare adapter
+
+### Clearing Build Cache
+
+If you encounter persistent build issues:
+1. Go to your Cloudflare Workers & Pages project
+2. Navigate to **Settings** → **Build**
+3. Click **"Clear Cache"**
+4. Trigger a new deployment
+
+### Viewing Build Logs
+
+To debug build failures:
+1. Go to your Cloudflare Workers & Pages project
+2. Click on the failed deployment
+3. Click **"View build"** to see detailed build output
 
 ---
 
@@ -364,8 +507,10 @@ thejonathanstewart-blog/
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start Astro development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
+| `npm run build` | Build for production (with TypeScript check) |
+| `npm run preview` | Preview with Wrangler (Cloudflare Workers env) |
+| `npm run deploy` | Build and deploy to Cloudflare Workers |
+| `npm run cf-typegen` | Generate Cloudflare Workers types |
 | `npm run sanity:dev` | Start Sanity Studio locally |
 | `npm run sanity:deploy` | Deploy Sanity Studio |
 

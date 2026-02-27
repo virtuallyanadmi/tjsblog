@@ -20,7 +20,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-let post = null;
+let post: any = null;
 try {
   post = await getPostBySlug(slug as string);
 } catch (error) {
