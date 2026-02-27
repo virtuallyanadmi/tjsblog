@@ -33,12 +33,17 @@ const isSanityConfigured = Boolean(projectId) && !!client;
 
 export function urlFor(source: SanityImageSource) {
   if (!builder) {
-    // return a dummy object with url() so callers don't crash
-    return {
-      width: () => ({ url: () => '' }),
-      height: () => ({ url: () => '' }),
-      url: () => '',
-    } as any;
+    // when Sanity isn't configured we still return a "fluent" stub so
+    // existing call chains like `urlFor(...).width(300).height(200).url()`
+    // don't throw.  All methods simply return the stub and url() yields
+    // an empty string.
+    const stub: any = {};
+    stub.url = () => '';
+    stub.width = () => stub;
+    stub.height = () => stub;
+    stub.fit = () => stub; // in case other helpers are used
+    stub.auto = () => stub;
+    return stub;
   }
 
   return builder.image(source);

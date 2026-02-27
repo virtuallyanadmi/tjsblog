@@ -234,6 +234,29 @@ Don't forget to add these environment variables to your Cloudflare Pages deploym
 
 ## ☁️ Deploying to Cloudflare Workers/Pages with Wrangler
 
+### Environment variable sync
+Cloudflare's dashboard replaces the full set of variables when you save. To keep your
+local `.env` file and your remote environment in sync you can use Wrangler's env
+commands – **these require Wrangler v4+**. If your local project still depends on
+v3 (as installed in `package.json`), either upgrade the dependency or invoke the
+global CLI directly (which you can install via `npm install -g wrangler`).
+
+```bash
+# using the global/updated binary
+wrangler pages env pull .env    # bring remote vars into .env
+wrangler pages env push .env    # push updated file back to Cloudflare
+
+# or use npx to grab the latest version on the fly
+npx wrangler@latest pages env pull .env
+npx wrangler@latest pages env push .env
+```
+
+The npm scripts below already call `npx wrangler@latest` to avoid this mismatch.
+
+If you prefer not to upgrade or can't use v4, simply manage the environment
+variables directly in the Cloudflare dashboard or with `wrangler secret put`.
+
+
 This site uses **Cloudflare Workers** with the **@astrojs/cloudflare** adapter for server-side rendering at the edge. Deployment is handled via **Wrangler**.
 
 ### Architecture
@@ -302,6 +325,7 @@ After selecting your repository, configure the build settings:
 | **Build command** | `npm run build` |
 | **Build output directory** | `dist` |
 | **Deploy command** | `npx wrangler deploy` |
+| **Sync env** | `npm run wrangler:env:pull` / `npm run wrangler:env:push` |
 | **Root directory** | `/` (leave empty or `/`) |
 
 #### Important Build Settings Notes:
