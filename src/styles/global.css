@@ -92,6 +92,18 @@
   .form-error {
     @apply text-red-600 dark:text-red-400 text-sm mt-1;
   }
+
+  /* Blog content width: full on small screens, 85% on larger screens */
+  .blog-width {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media (min-width: 640px) {
+    .blog-width {
+      width: 85%;
+    }
+  }
 }
 
 @layer utilities {

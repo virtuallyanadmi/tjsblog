@@ -47,7 +47,7 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
   <article>
     <!-- Hero -->
     <header class="bg-gray-50 dark:bg-gray-800/50 py-12 md:py-20 transition-colors duration-200">
-      <div class="container-custom max-w-4xl">
+      <div class="container-custom blog-width max-w-4xl">
         <!-- Categories -->
         {post.categories && post.categories.length > 0 && (
           <div class="flex flex-wrap gap-2 mb-6 justify-center">
@@ -100,7 +100,7 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
 
     <!-- Featured Image -->
     {post.mainImage && (
-      <div class="container-custom max-w-4xl -mt-4 mb-12">
+      <div class="container-custom blog-width max-w-4xl -mt-4 mb-12">
         <img 
           src={imageUrl}
           alt={post.mainImage.alt || post.title}
@@ -110,14 +110,14 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
     )}
 
     <!-- Content -->
-    <div class="container-custom max-w-3xl pb-16">
+    <div class="container-custom blog-width max-w-3xl pb-16">
       <div class="prose max-w-none" set:html={bodyHtml} />
     </div>
 
     <!-- Author Bio -->
     {post.author && (
       <section class="bg-gray-50 dark:bg-gray-800/50 py-12 transition-colors duration-200">
-        <div class="container-custom max-w-3xl">
+        <div class="container-custom blog-width max-w-3xl">
           <div class="flex flex-col md:flex-row items-center md:items-start gap-6 p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors duration-200">
             {post.author.image && (
               <img 
@@ -159,12 +159,12 @@ const bodyHtml = post.body ? renderPortableText(post.body) : '';
     )}
 
     <!-- Comments Section -->
-    <div class="container-custom max-w-3xl">
+    <div class="container-custom blog-width max-w-3xl">
       <Giscus />
     </div>
 
     <!-- Back to Blog -->
-    <div class="container-custom max-w-3xl py-8">
+    <div class="container-custom blog-width max-w-3xl py-8">
       <a 
         href="/blog" 
         class="inline-flex items-center text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
