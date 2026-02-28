@@ -11,6 +11,11 @@
     @apply antialiased;
   }
 
+  /* Improve dark-theme text contrast */
+  body {
+    @apply text-gray-900 dark:text-gray-200;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
   }
@@ -114,7 +119,7 @@
 
 /* Prose styles for blog content */
 .prose {
-  @apply text-gray-700 dark:text-gray-300 leading-relaxed transition-colors duration-200;
+  @apply text-gray-700 dark:text-gray-200 leading-relaxed transition-colors duration-200;
 }
 
 .prose h2 {
