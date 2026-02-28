@@ -42,15 +42,15 @@ const portableTextComponents = {
     h4: ({ children }: { children: string }) => 
       `<h4 class="text-xl font-semibold mt-6 mb-2 text-gray-900">${children}</h4>`,
     normal: ({ children }: { children: string }) => 
-      `<p class="mb-4 text-gray-700 leading-relaxed">${children}</p>`,
+      `<p class="mb-4 text-gray-200 leading-relaxed">${children}</p>`,
     blockquote: ({ children }: { children: string }) => 
-      `<blockquote class="border-l-4 border-primary-500 pl-4 my-6 italic text-gray-600">${children}</blockquote>`,
+      `<blockquote class="border-l-4 border-primary-500 pl-4 my-6 italic text-gray-600 dark:text-gray-400">${children}</blockquote>`,
   },
   list: {
     bullet: ({ children }: { children: string }) => 
-      `<ul class="list-disc list-inside mb-4 space-y-2 text-gray-700">${children}</ul>`,
+      `<ul class="list-disc list-inside mb-4 space-y-2 text-gray-200 dark:text-gray-300">${children}</ul>`,
     number: ({ children }: { children: string }) => 
-      `<ol class="list-decimal list-inside mb-4 space-y-2 text-gray-700">${children}</ol>`,
+      `<ol class="list-decimal list-inside mb-4 space-y-2 text-gray-200 dark:text-gray-300">${children}</ol>`,
   },
   listItem: {
     bullet: ({ children }: { children: string }) => `<li>${children}</li>`,
