@@ -103,6 +103,7 @@
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    @apply max-w-none;
   }
   @media (min-width: 640px) {
     .blog-width {
@@ -119,7 +120,7 @@
 
 /* Prose styles for blog content */
 .prose {
-  @apply text-gray-700 dark:text-gray-200 leading-relaxed transition-colors duration-200;
+  @apply text-gray-700 dark:text-gray-100 leading-relaxed transition-colors duration-200;
 }
 
 .prose h2 {
