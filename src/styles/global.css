@@ -32,7 +32,7 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-300 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
     @apply dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-900;
   }
 
@@ -91,7 +91,7 @@
   }
 
   .form-label {
-    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200;
+    @apply block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2 transition-colors duration-200;
   }
 
   .form-error {
