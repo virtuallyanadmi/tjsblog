@@ -6,7 +6,9 @@ const blog = defineCollection({
     title: z.string(),
     excerpt: z.string().optional(),
     publishedAt: z.string(),
-    mainImage: z.string().optional(),
+    mainImage: z.string().optional().transform((val) =>
+      val && !val.startsWith('http') ? `https://images.thejonathanstewart.com/${val}` : val
+    ),
     mainImageAlt: z.string().optional(),
     mainImageLight: z.boolean().optional(),
     categories: z.array(z.string()).default([]),
