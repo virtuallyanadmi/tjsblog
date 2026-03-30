@@ -12,7 +12,7 @@ const SECURITY_HEADERS: Record<string, string> = {
     "script-src 'self' 'unsafe-inline' https://giscus.app",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https://images.unsplash.com https://*.unsplash.com https://avatars.githubusercontent.com",
+    "img-src 'self' data: https://images.thejonathanstewart.com https://images.unsplash.com https://*.unsplash.com https://avatars.githubusercontent.com",
     "frame-src https://giscus.app",
     "connect-src 'self' https://api.web3forms.com https://formspree.io",
     "object-src 'none'",

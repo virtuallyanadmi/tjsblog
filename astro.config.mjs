@@ -18,6 +18,7 @@ export default defineConfig({
   }),
   image: {
     remotePatterns: [
+      { protocol: 'https', hostname: 'images.thejonathanstewart.com' },
       { protocol: 'https', hostname: '**.unsplash.com' },
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
     ],
