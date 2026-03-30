@@ -16,6 +16,12 @@ export default defineConfig({
       strategy: 'auto'
     }
   }),
+  image: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '**.unsplash.com' },
+      { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
+    ],
+  },
   build: {
     format: 'directory'
   }

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://thejonathanstewart.com/sitemap-index.xml
+Sitemap: https://thejonathanstewart.com/sitemap.xml

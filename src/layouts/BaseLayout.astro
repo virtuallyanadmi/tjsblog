@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { ViewTransitions } from 'astro:transitions';
 import '../styles/global.css';
 
 interface Props {
@@ -27,6 +28,9 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
+  <meta name="author" content="Jonathan Stewart" />
+  <meta name="theme-color" content="#0284c7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c4a6e" media="(prefers-color-scheme: dark)" />
   
   <!-- Theme initialization script (runs before page renders to prevent flash) -->
   <script is:inline>
@@ -45,6 +49,7 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl);
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="canonical" href={canonicalURL} />
+  <link rel="alternate" type="application/rss+xml" title="Jonathan Stewart RSS Feed" href="/rss.xml" />
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content={type} />
@@ -52,6 +57,9 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl);
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={new URL(image, siteUrl)} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Jonathan Stewart" />
   
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
@@ -61,11 +69,18 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl);
   <meta property="twitter:image" content={new URL(image, siteUrl)} />
   
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  </noscript>
   
   <title>{title}</title>
+  <ViewTransitions />
 </head>
 <body class="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
   <Header />
