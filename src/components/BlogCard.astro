@@ -1,43 +1,21 @@
 ---
-import { urlFor } from '../lib/sanity';
 import { formatDate, getCategoryIcon } from '../lib/utils';
+import type { PostSummary } from '../lib/content';
 
-interface Category {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  color?: string;
-  icon?: string;
-}
+type Props = PostSummary;
 
-interface Author {
-  name: string;
-  image?: any;
-}
+const { title, slug, excerpt, publishedAt, mainImage, mainImageAlt, categories, author, featured } = Astro.props;
 
-interface Props {
-  title: string;
-  slug: { current: string };
-  excerpt?: string;
-  publishedAt?: string;
-  mainImage?: any;
-  categories?: Category[];
-  author?: Author;
-  featured?: boolean;
-}
-
-const { title, slug, excerpt, publishedAt, mainImage, categories, author, featured } = Astro.props;
-
-const imageUrl = mainImage ? urlFor(mainImage).width(800).height(450).url() : '/placeholder-blog.svg';
+const imageUrl = mainImage || '/placeholder-blog.svg';
 ---
 
 <article class:list={['card card-hover group', featured && 'ring-2 ring-primary-500']}>
-  <a href={`/blog/${slug.current}`} class="block">
+  <a href={`/blog/${slug}`} class="block">
     <!-- Image -->
     <div class="relative aspect-video overflow-hidden">
       <img 
         src={imageUrl} 
-        alt={mainImage?.alt || title}
+        alt={mainImageAlt || title}
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         loading="lazy"
       />
@@ -80,7 +58,7 @@ const imageUrl = mainImage ? urlFor(mainImage).width(800).height(450).url() : '/
         <div class="flex items-center space-x-2">
           {author?.image && (
             <img 
-              src={urlFor(author.image).width(32).height(32).url()} 
+              src={author.image}
               alt={author.name}
               class="w-6 h-6 rounded-full"
             />

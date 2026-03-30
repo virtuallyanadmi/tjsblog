@@ -1,20 +1,9 @@
 ---
 import BlogCard from './BlogCard.astro';
-
-interface Post {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  excerpt?: string;
-  publishedAt?: string;
-  mainImage?: any;
-  categories?: any[];
-  author?: any;
-  featured?: boolean;
-}
+import type { PostSummary } from '../lib/content';
 
 interface Props {
-  posts: Post[];
+  posts: PostSummary[];
   title?: string;
   showViewAll?: boolean;
 }

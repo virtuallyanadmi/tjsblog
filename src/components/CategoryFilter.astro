@@ -1,16 +1,9 @@
 ---
 import { getCategoryIcon } from '../lib/utils';
-
-interface Category {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  color?: string;
-  icon?: string;
-}
+import type { CategoryData } from '../lib/content';
 
 interface Props {
-  categories: Category[];
+  categories: CategoryData[];
   activeCategory?: string;
 }
 
@@ -32,10 +25,10 @@ const { categories, activeCategory } = Astro.props;
   
   {categories.map((category) => (
     <a 
-      href={`/blog?category=${category.slug.current}`}
+      href={`/blog?category=${category.slug}`}
       class:list={[
         'px-4 py-2 rounded-full font-medium transition-all duration-200 inline-flex items-center gap-2',
-        activeCategory === category.slug.current
+        activeCategory === category.slug
           ? 'bg-primary-600 dark:bg-primary-500 text-white shadow-md'
           : 'bg-gray-100 dark:bg-gray-800 text-gray-300 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
       ]}

@@ -2,29 +2,16 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import CategoryFilter from '../../components/CategoryFilter.astro';
-import { getAllPosts, getAllCategories, getPostsByCategory } from '../../lib/sanity';
+import { getAllPosts, getAllCategories, getPostsByCategory } from '../../lib/content';
 
-// Get category from URL params
 const categorySlug = Astro.url.searchParams.get('category');
 
-// Fetch data
-let posts: any[] = [];
-let categories: any[] = [];
+const categories = await getAllCategories();
+const posts = categorySlug
+  ? await getPostsByCategory(categorySlug)
+  : await getAllPosts();
 
-try {
-  categories = await getAllCategories();
-  
-  if (categorySlug) {
-    posts = await getPostsByCategory(categorySlug);
-  } else {
-    posts = await getAllPosts();
-  }
-} catch (error) {
-  console.log('Sanity not configured or data not available');
-}
-
-// Find active category name for title
-const activeCategory = categories.find((c: any) => c.slug.current === categorySlug);
+const activeCategory = categories.find((c) => c.slug === categorySlug);
 const pageTitle = activeCategory 
   ? `${activeCategory.title} - Blog` 
   : 'Blog - Jonathan Stewart';
