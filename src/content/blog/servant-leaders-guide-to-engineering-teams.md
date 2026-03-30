@@ -2,7 +2,7 @@
 title: "The Servant Leader's Guide to Engineering Teams"
 excerpt: "Servant leadership isn't weakness — it's the most powerful model for building high-performing engineering organizations."
 publishedAt: "2025-01-20"
-mainImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&auto=format&fit=crop"
+mainImage: "https://images.thejonathanstewart.com/e885dc2d-f481-4a86-a88d-29b8b103fe6e.png"
 mainImageAlt: "Team collaboration in a modern office"
 categories: ["leadership"]
 featured: false
