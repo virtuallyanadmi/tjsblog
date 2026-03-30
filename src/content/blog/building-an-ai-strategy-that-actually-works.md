@@ -2,7 +2,7 @@
 title: "Building an AI Strategy That Actually Works"
 excerpt: "Most AI initiatives fail not because of technology, but because of strategy. Here's how to build one that delivers real business value."
 publishedAt: "2025-02-28"
-mainImage: ""
+mainImage: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1600&auto=format&fit=crop"
 mainImageAlt: "AI strategy planning session"
 categories: ["ai"]
 featured: true

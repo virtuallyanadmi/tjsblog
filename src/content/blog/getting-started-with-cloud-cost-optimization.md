@@ -2,7 +2,7 @@
 title: "Getting Started with Cloud Cost Optimization"
 excerpt: "Learn the foundational principles of FinOps and how to start reducing your cloud spend without sacrificing performance."
 publishedAt: "2025-03-15"
-mainImage: ""
+mainImage: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=1600&auto=format&fit=crop"
 mainImageAlt: "Cloud cost optimization dashboard"
 categories: ["cloud"]
 featured: true
