@@ -8,12 +8,7 @@
   }
 
   body {
-    @apply antialiased;
-  }
-
-  /* Improve dark-theme text contrast */
-  body {
-    @apply text-gray-900 dark:text-gray-200;
+    @apply antialiased text-gray-900 dark:text-gray-200;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -32,7 +27,7 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-300 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
     @apply dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-900;
   }
 
@@ -91,7 +86,7 @@
   }
 
   .form-label {
-    @apply block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2 transition-colors duration-200;
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-200;
   }
 
   .form-error {
@@ -118,55 +113,57 @@
   }
 }
 
-/* Prose styles for blog content */
-.prose {
-  @apply text-gray-700 dark:text-gray-200 leading-relaxed transition-colors duration-200;
-}
+@layer components {
+  /* Prose styles for blog content */
+  .prose {
+    @apply text-gray-700 dark:text-gray-200 leading-relaxed transition-colors duration-200;
+  }
 
-.prose h2 {
-  @apply text-3xl font-bold mt-10 mb-4 text-gray-900 dark:text-white;
-}
+  .prose h2 {
+    @apply text-3xl font-bold mt-10 mb-4 text-gray-900 dark:text-white;
+  }
 
-.prose h3 {
-  @apply text-2xl font-bold mt-8 mb-3 text-gray-900 dark:text-white;
-}
+  .prose h3 {
+    @apply text-2xl font-bold mt-8 mb-3 text-gray-900 dark:text-white;
+  }
 
-.prose h4 {
-  @apply text-xl font-semibold mt-6 mb-2 text-gray-900 dark:text-white;
-}
+  .prose h4 {
+    @apply text-xl font-semibold mt-6 mb-2 text-gray-900 dark:text-white;
+  }
 
-.prose p {
-  @apply text-gray-700 dark:text-gray-200 mb-4;
-}
+  .prose p {
+    @apply text-gray-700 dark:text-gray-200 mb-4;
+  }
 
-.prose a {
-  @apply text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 underline;
-}
+  .prose a {
+    @apply text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 underline;
+  }
 
-.prose blockquote {
-  @apply border-l-4 border-primary-500 dark:border-primary-400 pl-4 my-6 italic text-gray-600 dark:text-gray-400;
-}
+  .prose blockquote {
+    @apply border-l-4 border-primary-500 dark:border-primary-400 pl-4 my-6 italic text-gray-600 dark:text-gray-400;
+  }
 
-.prose ul {
-  @apply list-disc list-inside mb-4 space-y-2 text-gray-200 dark:text-gray-300;
-}
+  .prose ul {
+    @apply list-disc list-inside mb-4 space-y-2 text-gray-700 dark:text-gray-300;
+  }
 
-.prose ol {
-  @apply list-decimal list-inside mb-4 space-y-2;
-}
+  .prose ol {
+    @apply list-decimal list-inside mb-4 space-y-2;
+  }
 
-.prose img {
-  @apply rounded-lg my-8;
-}
+  .prose img {
+    @apply rounded-lg my-8;
+  }
 
-.prose pre {
-  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-lg overflow-x-auto my-6;
-}
+  .prose pre {
+    @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-lg overflow-x-auto my-6;
+  }
 
-.prose code {
-  @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono text-gray-800 dark:text-gray-200;
-}
+  .prose code {
+    @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono text-gray-800 dark:text-gray-200;
+  }
 
-.prose pre code {
-  @apply bg-transparent p-0 text-gray-100;
+  .prose pre code {
+    @apply bg-transparent p-0 text-gray-100;
+  }
 }
