@@ -50,12 +50,9 @@
 </button>
 
 <script>
-  // Theme toggle functionality
-  const themeToggle = document.getElementById('theme-toggle');
-  const sunIcon = document.getElementById('sun-icon');
-  const moonIcon = document.getElementById('moon-icon');
-
   function updateIcons() {
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
     const isDark = document.documentElement.classList.contains('dark');
     if (sunIcon && moonIcon) {
       sunIcon.classList.toggle('hidden', !isDark);
@@ -65,7 +62,6 @@
 
   function toggleTheme() {
     const isDark = document.documentElement.classList.contains('dark');
-    
     if (isDark) {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
@@ -73,24 +69,24 @@
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     }
-    
     updateIcons();
-    
-    // Dispatch custom event for other components (like Giscus) to react
     window.dispatchEvent(new CustomEvent('theme-change', {
       detail: { theme: isDark ? 'light' : 'dark' }
     }));
   }
 
-  // Initialize icons on load
-  updateIcons();
-
-  // Add click listener
-  if (themeToggle) {
-    themeToggle.addEventListener('click', toggleTheme);
+  function init() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+    updateIcons();
   }
 
-  // Listen for storage changes (sync across tabs)
+  // Re-run on every page load, including after ViewTransition swaps
+  document.addEventListener('astro:page-load', init);
+
+  // Sync theme across tabs
   window.addEventListener('storage', (e) => {
     if (e.key === 'theme') {
       if (e.newValue === 'dark') {
