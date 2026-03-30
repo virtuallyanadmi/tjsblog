@@ -15,7 +15,8 @@ if (!post) {
 const { Content } = await post.entry.render();
 const author = await getAuthor();
 
-const imageUrl = post.mainImage || '/placeholder-blog.svg';
+const imageUrl = post.mainImage || '';
+const mainImageLight = post.entry.data.mainImageLight;
 ---
 
 <BaseLayout 
@@ -25,14 +26,25 @@ const imageUrl = post.mainImage || '/placeholder-blog.svg';
   type="article"
 >
   <article>
-    <!-- Hero -->
-    <header class="bg-gray-50 dark:bg-gray-800/50 py-12 md:py-20 transition-colors duration-200">
-      <div class="container-custom blog-width max-w-4xl">
+    <!-- Hero Header (image as background when available) -->
+    <header
+      id="post-hero"
+      class={`relative overflow-hidden ${imageUrl ? 'py-20 md:py-32' : 'bg-gray-50 dark:bg-gray-800/50 py-12 md:py-20'}`}
+      data-image-light={mainImageLight === true ? 'true' : mainImageLight === false ? 'false' : ''}
+    >
+      {imageUrl && (
+        <>
+          <div class="absolute inset-0 bg-cover bg-center" style={`background-image: url('${imageUrl}');`} />
+          <div id="hero-overlay" class="absolute inset-0 bg-black/55 transition-colors duration-300" />
+        </>
+      )}
+
+      <div id="hero-content" class={`relative z-10 container-custom blog-width max-w-4xl ${imageUrl ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
         <!-- Categories -->
         {post.categories && post.categories.length > 0 && (
           <div class="flex flex-wrap gap-2 mb-6 justify-center">
             {post.categories.map((category: any) => (
-              <a 
+              <a
                 href={`/blog?category=${category.slug}`}
                 class:list={['badge', `badge-${category.color || 'blue'}`, 'hover:opacity-80 transition-opacity']}
               >
@@ -43,23 +55,23 @@ const imageUrl = post.mainImage || '/placeholder-blog.svg';
         )}
 
         <!-- Title -->
-        <h1 class="text-3xl md:text-5xl font-display font-bold text-gray-900 dark:text-white mb-6 text-center text-balance transition-colors duration-200">
+        <h1 class="text-3xl md:text-5xl font-display font-bold mb-6 text-center text-balance">
           {post.title}
         </h1>
 
         <!-- Excerpt -->
         {post.excerpt && (
-          <p class="text-xl text-gray-600 dark:text-gray-400 text-center max-w-3xl mx-auto mb-8 transition-colors duration-200">
+          <p data-hero-sub class={`text-xl text-center max-w-3xl mx-auto mb-8 ${imageUrl ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'}`}>
             {post.excerpt}
           </p>
         )}
 
         <!-- Meta -->
-        <div class="flex items-center justify-center space-x-4 text-gray-600 dark:text-gray-400 transition-colors duration-200">
+        <div data-hero-sub class={`flex items-center justify-center space-x-4 ${imageUrl ? 'text-white/80' : 'text-gray-600 dark:text-gray-400'}`}>
           {post.author && (
             <div class="flex items-center space-x-2">
               {post.author.image && (
-                <img 
+                <img
                   src={post.author.image}
                   alt={post.author.name}
                   class="w-10 h-10 rounded-full"
@@ -77,17 +89,6 @@ const imageUrl = post.mainImage || '/placeholder-blog.svg';
         </div>
       </div>
     </header>
-
-    <!-- Featured Image -->
-    {post.mainImage && (
-      <div class="container-custom blog-width max-w-4xl -mt-4 mb-12">
-        <img 
-          src={imageUrl}
-          alt={post.mainImageAlt || post.title}
-          class="w-full rounded-xl shadow-lg"
-        />
-      </div>
-    )}
 
     <!-- Content -->
     <div class="container-custom blog-width max-w-3xl pb-16">
@@ -155,3 +156,65 @@ const imageUrl = post.mainImage || '/placeholder-blog.svg';
     </div>
   </article>
 </BaseLayout>
+
+{imageUrl && (
+  <script>
+    (function () {
+      const hero = document.getElementById('post-hero') as HTMLElement | null;
+      if (!hero) return;
+
+      const overlay = document.getElementById('hero-overlay') as HTMLElement | null;
+      const content = document.getElementById('hero-content') as HTMLElement | null;
+      if (!overlay || !content) return;
+
+      const subEls = Array.from(content.querySelectorAll<HTMLElement>('[data-hero-sub]'));
+
+      function applyLight() {
+        overlay!.style.backgroundColor = 'rgba(255,255,255,0.45)';
+        content!.style.color = '#111827';
+        subEls.forEach(el => { el.style.color = '#4B5563'; });
+      }
+
+      function applyDark() {
+        overlay!.style.backgroundColor = 'rgba(0,0,0,0.55)';
+        content!.style.color = '#ffffff';
+        subEls.forEach(el => { el.style.color = 'rgba(255,255,255,0.82)'; });
+      }
+
+      const hint = hero.dataset.imageLight;
+      if (hint === 'true')  { applyLight(); return; }
+      if (hint === 'false') { applyDark();  return; }
+
+      // Auto-detect via Canvas
+      const bgDiv = hero.querySelector<HTMLElement>('.absolute.bg-cover');
+      if (!bgDiv) return;
+      const rawBg = window.getComputedStyle(bgDiv).backgroundImage;
+      const match = rawBg.match(/url\(['"]?([^'"]+)['"]?\)/);
+      if (!match) return;
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function () {
+        try {
+          const size = 64;
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
+          ctx.drawImage(img, 0, 0, size, size);
+          const data = ctx.getImageData(0, 0, size, size).data;
+          let total = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            total += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+          }
+          const avg = total / (data.length / 4);
+          avg > 160 ? applyLight() : applyDark();
+        } catch (_) {
+          // CORS blocked — keep default dark overlay
+        }
+      };
+      img.src = match[1];
+    })();
+  </script>
+)}
