@@ -54,19 +54,21 @@ const isDev = import.meta.env.DEV;
   <section class="giscus-comments mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 transition-colors duration-200">
     <h2 class="text-2xl font-display font-bold text-gray-900 dark:text-white mb-6">Comments</h2>
     <div class="giscus-wrapper bg-white dark:bg-gray-800 rounded-lg transition-colors duration-200">
-      <div id="giscus-container"
-        data-repo={repo}
-        data-repo-id={repoId}
-        data-category={category}
-        data-category-id={categoryId}
-        data-mapping={mapping}
+      <Fragment set:html={`<script src="https://giscus.app/client.js"
+        data-repo="${repo}"
+        data-repo-id="${repoId}"
+        data-category="${category}"
+        data-category-id="${categoryId}"
+        data-mapping="${mapping}"
         data-strict="0"
-        data-reactions-enabled={reactionsEnabled ? '1' : '0'}
-        data-emit-metadata={emitMetadata ? '1' : '0'}
-        data-input-position={inputPosition}
-        data-lang={lang}
-        data-loading={lazyLoad ? 'lazy' : 'eager'}
-      />
+        data-reactions-enabled="${reactionsEnabled ? '1' : '0'}"
+        data-emit-metadata="${emitMetadata ? '1' : '0'}"
+        data-input-position="${inputPosition}"
+        data-theme="preferred_color_scheme"
+        data-lang="${lang}"
+        data-loading="${lazyLoad ? 'lazy' : 'eager'}"
+        crossorigin="anonymous"
+        async><\/script>`} />
     </div>
   </section>
 ) : isDev ? (
@@ -91,46 +93,6 @@ const isDev = import.meta.env.DEV;
 ) : null}
 
 <script>
-  // Get current theme
-  function getCurrentTheme() {
-    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-  }
-
-  // Load or reload Giscus with the correct theme
-  function loadGiscus() {
-    const container = document.getElementById('giscus-container');
-    if (!container) return;
-
-    // Remove existing Giscus iframe if present
-    const existingGiscus = container.querySelector('.giscus');
-    if (existingGiscus) {
-      existingGiscus.remove();
-    }
-
-    // Get theme
-    const theme = getCurrentTheme();
-
-    // Create and inject the Giscus script
-    const script = document.createElement('script');
-    script.src = 'https://giscus.app/client.js';
-    script.setAttribute('data-repo', container.dataset.repo || '');
-    script.setAttribute('data-repo-id', container.dataset.repoId || '');
-    script.setAttribute('data-category', container.dataset.category || '');
-    script.setAttribute('data-category-id', container.dataset.categoryId || '');
-    script.setAttribute('data-mapping', container.dataset.mapping || 'pathname');
-    script.setAttribute('data-strict', container.dataset.strict || '0');
-    script.setAttribute('data-reactions-enabled', container.dataset.reactionsEnabled || '1');
-    script.setAttribute('data-emit-metadata', container.dataset.emitMetadata || '0');
-    script.setAttribute('data-input-position', container.dataset.inputPosition || 'bottom');
-    script.setAttribute('data-theme', theme);
-    script.setAttribute('data-lang', container.dataset.lang || 'en');
-    script.setAttribute('data-loading', container.dataset.loading || 'lazy');
-    script.crossOrigin = 'anonymous';
-    script.async = true;
-
-    container.appendChild(script);
-  }
-
   // Update Giscus theme via postMessage
   function updateGiscusTheme(theme: string) {
     const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
@@ -142,12 +104,21 @@ const isDev = import.meta.env.DEV;
     }
   }
 
-  // Initialize Giscus on page load
-  loadGiscus();
+  // Sync Giscus theme with the site theme on load
+  function syncTheme() {
+    const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    updateGiscusTheme(theme);
+  }
+
+  // Wait for the iframe to load before syncing theme
+  window.addEventListener('message', (e) => {
+    if (e.origin !== 'https://giscus.app') return;
+    if (typeof e.data === 'object' && e.data.giscus) syncTheme();
+  });
 
   // Listen for theme changes
   window.addEventListener('theme-change', (e: any) => {
-    const theme = e.detail?.theme || getCurrentTheme();
+    const theme = e.detail?.theme || (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     updateGiscusTheme(theme);
   });
 </script>
