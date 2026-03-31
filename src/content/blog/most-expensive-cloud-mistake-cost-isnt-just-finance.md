@@ -42,11 +42,9 @@ Instead, I've had the best outcomes when leaders do three things consistently:
 1. **Make cost a visible part of the work**
    - Not as a blame metric
    - As a feedback loop
-
 2. **Give teams autonomy within boundaries**
    - Teams should be able to move fast
    - With guardrails that keep everyone safe
-
 3. **Coach cost thinking into engineering habits**
    - "What's the cheapest way?" isn't the question
    - "What's the most responsible way to meet the goal?" is
